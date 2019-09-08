@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<style type="text/css" id="19762177980"></style>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>用户管理</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link href="/css/home.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+    <link rel="shortcut icon" href="http://ls.dqqkp.com/favicon.ico">
+    <link rel="stylesheet" href="http://www.bootcss.com/p/buttons/css/buttons.css">
+    <script src="clipboard.min.js"></script>
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+</head>
+</head>
+<body>
+<div id="wrapper">
+    <div id="nav">
+        <script>
+            $("#nav").load("/html/nav.html");
+        </script>
+    </div>
+    <!---->
+    <div id="wrapper wrapper-content" style="padding: 10px;">
+        <div class="row">
+            <div class="col-md-6">
+                <a href="/html/addAgent.html" class="btn btn-success">添加代理</a>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-hover table-striped">
+                <thead>
+                <tr>
+                    <td>用户名</td>
+                    <td>昵称</td>
+                    <td>授权数</td>
+                    <td>已使用</td>
+                   <!-- <td>未使用</td>
+                    <td>已授权</td>-->
+                    <td>是否封停</td>
+                    <td>操作</td>
+                </tr>
+                </thead>
+                <tbody id="agentInfo">
+
+                </tbody>
+            </table>
+            <div class="clearfix"></div>
+            <ul class="pagination"></ul>
+        </div>
+    </div>
+</div>
+<script>
+    $.get('/getAgentInfo',function(data) {
+        if (data.status==200) {
+            var list = data.data.list;
+            var view='';
+            for(var i = 0 ; i < list.length ; i++){
+                view+='<tr class="text-c">\n' +
+                    '                    <td>'+list[i].username+'</td>\n' +
+                    '                    <td>'+list[i].nickname+'</td>\n' +
+                    '                    <td>'+list[i].allCount+'</td>\n' +
+                    '                    <td>'+list[i].nowCount+'</td>\n' +
+                    '                    <td>'+isOK(list[i].isOk)+'</td>\n' +
+                    '                    <td class="td-manage">\n' +
+                    '                        <a href="/html/move.html" class="button button-pill button-tiny">转赠授权</a><a\n' +
+                    '                            href="javascript:void(0);" onclick="lockUser('+list[i].id+')" class="button button-pill button-tiny">封停帐号</a>\n' +
+                    '                    </td>\n' +
+                    '                </tr>';
+            }
+
+
+            $("#agentInfo").html(view);
+        }else{
+            window.location.href="/html/login.html";
+        }
+    },'json');
+
+    function isOK(isOk) {
+        if(1==isOk){
+            return "封停";
+        }else{
+            return "正常";
+        }
+    }
+    function lockUser(id) {
+        alert("暂未开放！")
+    }
+</script>
+</body>
+</html>

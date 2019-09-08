@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<style type="text/css" id="19762177980"></style>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>激活统计</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link href="/css/home.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+    <link rel="shortcut icon" href="http://ls.dqqkp.com/favicon.ico">
+    <link rel="stylesheet" href="http://www.bootcss.com/p/buttons/css/buttons.css">
+    <script src="clipboard.min.js"></script>
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div id="wrapper">
+    <!-- Sidebar -->
+    <div id="nav">
+        <script>
+            $("#nav").load("/html/nav.html");
+        </script>
+    </div>
+    <!---->
+    <div id="wrapper wrapper-content" style="padding: 10px;">
+        <ol class="breadcrumb">
+            <li><a href="/html/index.html"><i class="fa fa-home"></i> 首页</a></li>
+            <li class="active"><i class="fa fa-info"></i> 卡密激活统计</li>
+        </ol>
+        <div class="row">
+            <div class="col-md-2">
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover table-striped">
+                <thead>
+                <tr>
+                    <th>激活日期</th>
+                    <th>激活数量</th>
+                    <th>激活状态</th>
+                </tr>
+                </thead>
+                <tbody id="cardInfo">
+                <tr>
+                    <td>时间</td>
+                    <td></td>
+                    <td>
+                        已激活
+                    </td>
+
+                </tr>
+                </tbody>
+            </table>
+            <div class="clearfix"></div>
+            <ul class="pagination"></ul>
+        </div>
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <ul class="pagination">
+                    <div>
+                    </div>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+<script>
+    $.get('/getActiveCard',function(data) {
+        if (data.status==200) {
+            var list = data.data.list;
+            var view='';
+            for(var i = 0 ; i < list.length ; i++){
+                view+='<tr>\n' +
+                    '                <td>list[i].usetime</td>\n' +
+                    '                <td></td>\n' +
+                    '                <td>\n' +
+                    '                已激活\n' +
+                    '                </td>\n' +
+                    '                </tr>';
+            }
+
+            $("#timeStr").html(data.data.dateStr);
+            $("#allCard").html(data.data.allCard);
+            $("#remainCard").html(data.data.remainCard);
+            $("#usedCard").html(data.data.usedCard);
+            $("#notUsedCard").html(data.data.notUsedCard);
+            sessionStorage.setItem("remainCard",data.data.remainCard);
+        }else{
+            window.location.href="/html/login.html";
+        }
+    },'json');
+</script>
+</html>

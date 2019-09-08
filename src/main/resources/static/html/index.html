@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<style type="text/css" id="19762177980"></style>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link href="/css/home.css" rel="stylesheet">
+    <title>激活码平台</title>
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+    <link rel="shortcut icon" href="http://ls.dqqkp.com/favicon.ico">
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div id="wrapper">
+    <div id="nav">
+        <script>
+            $("#nav").load("/html/nav.html");
+        </script>
+    </div>
+    <div id="wrapper" style="padding: 10px; background: #ffffff;">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div id="timeStr" class="col-xs-12">时间：</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-2">
+                                <a href="add.html"><i class="fa fa-link fa-5x"></i></a>
+                            </div>
+                            <div class="col-xs-10 text-right">
+                                <p id="allCard" class="announcement-heading">0</p>
+                                <p class="announcement-text">个</p>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="add.html">
+                        <div class="panel-footer announcement-bottom">
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    点击生成卡密
+                                </div>
+                                <div class="col-xs-6 text-right">
+                                    <i class="fa fa-arrow-circle-right"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-2">
+                                <a href="move.html"><i class="fa  fa-comment fa-5x"></i></a>
+                            </div>
+                            <div class="col-xs-10 text-right">
+                                <p id="remainCard" class="announcement-heading">0</p>
+                                <p class="announcement-text">个</p>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="move.html">
+                        <div class="panel-footer announcement-bottom">
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    可用授权数
+                                </div>
+                                <div class="col-xs-6 text-right">
+                                    <i class="fa fa-arrow-circle-right"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-lg-3">
+                <div class="panel panel-warning">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-2">
+                                <a href="actyes.html"><i class="fa fa-users fa-5x"></i></a>
+                            </div>
+                            <div class="col-xs-10 text-right">
+                                <p id="usedCard" class="announcement-heading">0</p>
+                                <p class="announcement-text">个</p>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="actyes.html">
+                        <div class="panel-footer announcement-bottom">
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    已用授权数
+                                </div>
+                                <div class="col-xs-6 text-right">
+                                    <i class="fa fa-arrow-circle-right"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-lg-3">
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-2">
+                                <a href="actno.html"><i class="fa fa-link fa-5x"></i></a>
+                            </div>
+                            <div class="col-xs-10 text-right">
+                                <p id="notUsedCard" class="announcement-heading">0</p>
+                                <p class="announcement-text">个</p>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="actno.html">
+                        <div class="panel-footer announcement-bottom">
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    未用卡密
+                                </div>
+                                <div class="col-xs-6 text-right">
+                                    <i class="fa fa-arrow-circle-right"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    $.get('/getUserInfo','',function(data) {
+        if (data.status==200) {
+            $("#timeStr").html(data.data.dateStr);
+            $("#allCard").html(data.data.allCard);
+            $("#remainCard").html(data.data.remainCard);
+            $("#usedCard").html(data.data.usedCard);
+            $("#notUsedCard").html(data.data.notUsedCard);
+            sessionStorage.setItem("remainCard",data.data.remainCard);
+        }else{
+            window.location.href="/html/login.html";
+        }
+    },'json');
+</script>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<style type="text/css" id="19762177980"></style>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>锁定卡密</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link href="/css/home.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+    <link rel="shortcut icon" href="favicon.ico">
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div id="wrapper">
+    <div id="nav">
+        <script>
+            $("#nav").load("/html/nav.html");
+        </script>
+    </div>
+    <!---->
+    <div id="wrapper wrapper-content" style="padding: 25px;">
+        <form>
+            <div class="form-group">
+                <label for="post-title">锁定卡密</label>
+                <span class="label label-success">请输入要锁定的卡密</span>
+                <input type="text" id="key" name="key" class="form-control" placeholder="请输入要锁定的卡密">
+            </div>
+            <button type="button" class="btn btn-default">确认锁定</button>
+        </form>
+    </div>
+</div>
+</body>
+<script>
+    var cardNo = $("#text").val();
+    $.get('/lockCard', {"cardNo": cardNo}, function (data) {
+        if (data.status == 200) {
+            alert(data.msg);
+        } else {
+            window.location.href = "/html/login.html";
+        }
+    }, 'json');
+</script>
+</html>

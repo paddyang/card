@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<!-- saved from url=(0037)http://ls.dqqkp.com/index.php?do=move -->
+<html lang="en">
+<style type="text/css" id="19762177980"></style>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>添加代理</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link href="/css/home.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+    <link rel="shortcut icon" href="http://ls.dqqkp.com/favicon.ico">
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div id="wrapper">
+    <!-- Sidebar -->
+    <div id="nav">
+        <script>
+            $("#nav").load("/html/nav.html");
+        </script>
+    </div>
+    <!---->
+    <div id="wrapper wrapper-content" style="padding: 10px;">
+        <form>
+            <div class="form-group">
+                <label>手机号(<font color="red">必填</font>)</label>
+                <input class="form-control" type="text" id="phone" name="phone" placeholder="手机号——登录使用">
+            </div>
+            <div class="form-group">
+                <label>昵称(<font color="red">必填</font>)</label>
+                <input class="form-control" type="text" id="nickname" name="nickname" placeholder="昵称——后台显示">
+            </div>
+            <div class="form-group" id="userType" style="display: none">
+                <label>类型(<font color="red">必填</font>)</label>
+                <input class="form-control" type="text" id="type" name="type" value="" placeholder="用户类型">
+            </div>
+            <div class="alert alert-danger" role="alert">
+                为防止资源浪费，默认创建的代理卡密数量为0，用户默认密码 123456 创建后请在授权转赠中为新代理增加授权数量，并通知代理修改默认密码。
+            </div>
+            <div class="form-group">
+                <button type="button" onclick="addAgent()" class="btn btn-success">创建代理</button>
+            </div>
+        </form>
+    </div>
+    <!----><!---->
+</div>
+<script>
+    if(sessionStorage.getItem("username")=="paddy"){
+        $("#userType").show();
+    }
+    function addAgent(){
+        var phone = $("#phone").val();
+        var type = $("#type").val();
+        var nickname = $("#nickname").val();
+        if (!phone || !nickname) {
+            alert("用户名或昵称不能为空");
+        } else {
+            $.get('/addAgent', {
+                phone : phone,
+                nickname : nickname,
+                type : type
+            }, function(data) {
+                if (data.status == 200){
+                    //成功
+                    alert(data.msg)
+                } else {
+                    window.location.href='/html/login.html';
+                }
+            },'json');
+        }
+    }
+</script>
+</body>
+</html>

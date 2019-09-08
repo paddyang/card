@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en"><style type="text/css" id="19762177980"></style><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>生成卡密</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link href="/css/home.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+	<link rel="shortcut icon" href="favicon.ico">
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div id="wrapper">
+    <div id="nav">
+        <script>
+            $("#nav").load("/html/nav.html");
+        </script>
+    </div>
+<!---->
+<div id="wrapper wrapper-content" style="padding: 25px;">
+    <form target="_blank">
+        <div class="form-group">
+            <label for="post-title">生成卡密</label>
+            <span class="label label-success">剩余<span id="remainCard">0</span>个</span>
+            <input type="text" id="codeNum" name="codeNum" class="form-control" placeholder="输入生成个数 不输入则默认生成1个"><br>
+        </div>
+        <div class="form-group" id="super" style="display: none">
+            <select id="days" class="form-control">
+                <option value ="365">365</option>
+                <option value ="3">3</option>
+            </select>
+            <!--<input type="text" id="days" name="days" class="form-control" value="365" placeholder="输入有效天数 不输入则默认365天">-->
+            <select id="safeCode" class="form-control">
+                <option value ="BLZS">BLZS</option>
+                <option value ="FFSD">FFSD</option>
+                <option value="AZCT">AZCT</option>
+                <option value="SX">SX</option>
+            </select>
+            <!--<input type="text" id="safeCode" name="safeCode" class="form-control" value="FFSD" placeholder="请输入安全码">-->
+        </div>
+		<button onclick="add()" type="button"  class="btn btn-default">确认生成</button>
+    </form>
+</div>
+<!----><!---->
+        </div>
+    <script>
+        var remainCard = sessionStorage.getItem("remainCard");
+        if(sessionStorage.getItem("username")=="paddy"){
+            $("#super").show();
+        }
+        $("#remainCard").text(remainCard);
+        function add() {
+            var codeNum = $("#codeNum").val();
+            var days = $("#days").val();
+            var safeCode = $("#safeCode").val();
+            if (null==codeNum) {
+                codeNum=1;
+            }
+            if (null==days) {
+                days=365;
+            }
+            $.post("/add",{'num':codeNum,'days':days,'safeCode':safeCode},function (data) {
+                if (data.status==200) {
+                    sessionStorage.setItem("remainCard",remainCard-codeNum);
+                    alert("生成卡密成功！");
+                }else {
+                    alert("生成卡密失败！");
+                    window.location.href="/html/login.html"
+
+                }
+            },'json');
+        }
+    </script>
+</body></html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<style type="text/css" id="19762177980"></style>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>未使用卡密</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link href="/css/home.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+    <link rel="shortcut icon" href="http://ls.dqqkp.com/favicon.ico">
+    <link rel="stylesheet" href="http://www.bootcss.com/p/buttons/css/buttons.css">
+    <script src="clipboard.min.js"></script>
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div id="wrapper">
+    <!-- Sidebar -->
+    <div id="nav">
+        <script>
+            $("#nav").load("/html/nav.html");
+        </script>
+    </div>
+    <!---->
+    <div id="wrapper wrapper-content" style="padding: 10px;">
+        <ol class="breadcrumb">
+            <li><a href="/html/index.html"><i class="fa fa-home"></i> 首页</a></li>
+            <li class="active"><i class="fa fa-info"></i> 未使用卡密</li>
+        </ol>
+
+        <div class="row">
+
+            <div class="col-md-2">
+                <a href="allnouse.php" class="btn btn-warning">下载全部未用卡密</a>
+            </div>
+            <!--  <div class="col-md-2">
+                <a href="xlsx.php" class="btn btn-warning">下载全部未用卡密</a>
+            </div>-->
+
+            <!--         <div class="col-md-6">
+                       <form action="./files/actno.html" method="post">
+                           <div class="form-group input-group">
+                               <input type="text" class="form-control" name="key" placeholder="输入激活码搜索">
+                               <span class="input-group-btn">
+                                   <input class="btn btn-default" type="submit" value="查询">
+                               </span>
+                           </div>
+                       </form>
+                   </div>-->
+
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover table-striped">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>卡密</th>
+                    <th>状态</th>
+                    <th>标识</th>
+                    <th>生成时间</th>
+                    <!---->
+                    <th>有效天数</th>
+                </tr>
+                </thead>
+                <tbody id="cardInfo">
+                <tr>
+                    <td>114</td>
+                    <td><button class="button button-rounded button-tiny" data-clipboard-text="XSG0A34A041D">XSG0A34A041D</button></td>
+                    <td><span class="label label-warning">未用</span></td>
+                    <td>2019-07-11 21:57:03</td>
+                    <!--<td></td>-->
+                    <td>999</td>
+                </tr>
+                </tbody>
+            </table>
+
+
+            <div class="clearfix"></div>
+            <ul class="pagination"></ul>
+        </div>
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <button class="button button-rounded button-tiny" data-clipboard-text="<?echo $kamilist;?>">复制当前页卡密
+                </button>
+                <ul class="pagination" id="page">
+                    <div>
+                        <!--<ul class="pagination"><li class="active"><a>1</a></li><li><a href="#">2</a></li><li><a  title="下一页" href="?p=2">»</a></li></ul>-->
+                    </div>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!----><!---->
+</div>
+<script>
+    var btns = document.querySelectorAll('button');
+    var clipboard = new Clipboard(btns);
+
+    clipboard.on('success', function (e) {
+        console.log(e);
+        alert("卡密复制成功");
+    });
+
+    clipboard.on('error', function (e) {
+        console.log(e);
+    });
+</script>
+<script>
+    myPage(1);
+
+    function myPage(pageNum){
+        $.get('/getNotUsedCards', {"pageNum":pageNum},function (data) {
+            $('#cardInfo').empty();
+            $('#page').empty();
+            if (data.status == 200) {
+                var pageInfo=data.data;
+                var list = data.data.list;
+                var view = '';
+                for (var i = 0; i < list.length; i++) {
+                    view += '<tr></tr><td>'+list[i].id+'</td>\n' +
+                        '                    <td><button class="button button-rounded button-tiny" data-clipboard-text="'+list[i].cardNo+'">'+list[i].cardNo+'</button></td>\n' +
+                        '                    <td><span class="label label-warning">未用</span></td>\n' +
+                        '                    <td>'+list[i].safeCode+'</td>\n' +
+                        '                    <td>'+list[i].createTime+'</td>\n' +
+                        '                    <td>'+list[i].days+'</td></tr>';
+                }
+                var page='<div>\n' +
+                    '                        第 '+pageInfo.pageNum+'/'+pageInfo.pages+' 页 共 '+pageInfo.total+' 条记录 &nbsp;&nbsp;<a onclick="myPage(1)" href="javascript:void(0);">首页</a> &nbsp;&nbsp;<a onclick="myPage('+pageInfo.prePage+')" href="javascript:void(0);">前一页</a>\n' +
+                    '                        &nbsp;&nbsp;<a onclick="myPage('+pageInfo.nextPage+')" href="javascript:void(0);">后一页</a> &nbsp;&nbsp;<a onclick="myPage('+pageInfo.navigateLastPage+')" href="javascript:void(0);">末页</a>　&nbsp;&nbsp;跳到\n' +
+                    '                        <select name="topage" size="1" onchange="myPage(this.value)">\n' +
+                    '                        <option value="1" selected="">1</option>\n' +
+                    '                        <option value="2">2</option>\n' +
+                    '                        </select>\n' +
+                    '                    </div>';
+
+                $("#cardInfo").html(view);
+                $("#page").html(page);
+
+            } else {
+                window.location.href = "/html/login.html";
+            }
+        }, 'json');
+    }
+
+</script>
+</body>
+</html>

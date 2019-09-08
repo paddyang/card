@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<!-- saved from url=(0040)http://ls.dqqkp.com/index.php?do=jhm&s=y -->
+<html lang="en">
+<style type="text/css" id="19762177980"></style>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>已锁定卡密</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link href="/css/home.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+    <link rel="shortcut icon" href="http://ls.dqqkp.com/favicon.ico">
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div id="wrapper">
+    <div id="nav">
+        <script>
+            $("#nav").load("/html/nav.html");
+        </script>
+    </div>
+    <div id="wrapper wrapper-content" style="padding: 10px;">
+        <ol class="breadcrumb">
+            <li><a href="/html/index.html"><i class="fa fa-home"></i> 首页</a></li>
+            <li class="active"><i class="fa fa-info"></i> 已锁定卡密</li>
+        </ol>
+
+        <div class="row">
+            <!--
+                    <div class="col-md-6">
+                        <form action="./files/actyes.html" method="post">
+                            <div class="form-group input-group">
+                                <input type="text" class="form-control" name="key" placeholder="输入卡密搜索">
+                                <span class="input-group-btn">
+                                    <input class="btn btn-default" type="submit" value="查询">
+                                </span>
+                            </div>
+                        </form>
+                    </div>-->
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover table-striped">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>卡密</th>
+                    <th>状态</th>
+                    <th>标识</th>
+                    <th>生成时间</th>
+                    <!---->
+                    <th>使用时间</th>
+                    <th>操作</th>
+                    <!---->
+                </tr>
+                </thead>
+                <tbody id="cardInfo">
+                </tbody>
+            </table>
+
+
+            <div class="clearfix"></div>
+            <ul class="pagination"></ul>
+        </div>
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <ul class="pagination" id="page">
+                    <div>
+                        <!--<ul class="pagination"><li class="active"><a>1</a></li></ul>-->
+                    </div>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!----><!---->
+</div>
+</body>
+<script>
+    myPage(1);
+
+    function myPage(pageNum) {
+        $.get('/getLockCard', {"pageNum": pageNum}, function (data) {
+            $('#cardInfo').empty();
+            $('#page').empty();
+            if (data.status == 200) {
+                var pageInfo = data.data;
+                var list = data.data.list;
+                var view = '';
+                for (var i = 0; i < list.length; i++) {
+                    view += '<tr>\n' +
+                        '                    <td>' + list[i].id + '</td>\n' +
+                        '                    <td>' + list[i].cardNo + '</td>\n' +
+                        '                    <td><span class="label label-warning" id="' + list[i].id + '">' + changeStatus(list[i].status) + '</span></td>\n' +
+                        '                    <td>' + list[i].safeCode + '</td>\n' +
+                        '                    <td>' + list[i].createTime + '</td>\n' +
+                        '                    <td>' + list[i].useTime + '</td>\n' +
+                        '                    <td><span class="label label-info">' + changeStatus(list[i].status) + '</span>&nbsp;&nbsp;<a style="text-decoration:none"\n' +
+                        '                                                                              onclick="lock(' + list[i].id + ')" href="javascript:void(0);" title="' + changeTitle(list[i].status) + '"><span\n' +
+                        '                            class="label label-success">' + change(list[i].status) + '</span></a>\n' +
+                        '                    </td>\n' +
+                        '                </tr>';
+                }
+                var page = '<div>\n' +
+                    '                        第 ' + pageInfo.pageNum + '/' + pageInfo.pages + ' 页 共 ' + pageInfo.total + ' 条记录 &nbsp;&nbsp;<a onclick="myPage(1)" href="javascript:void(0);">首页</a> &nbsp;&nbsp;<a onclick="myPage(' + pageInfo.prePage + ')" href="javascript:void(0);">前一页</a>\n' +
+                    '                        &nbsp;&nbsp;<a onclick="myPage(' + pageInfo.nextPage + ')" href="javascript:void(0);">后一页</a> &nbsp;&nbsp;<a onclick="myPage(' + pageInfo.navigateLastPage + ')" href="javascript:void(0);">末页</a>　&nbsp;&nbsp;跳到\n' +
+                    '                        <select name="topage" size="1" onchange="myPage(this.value)">\n' +
+                    '                        <option value="1" selected="">1</option>\n' +
+                    '                        <option value="2">2</option>\n' +
+                    '                        </select>\n' +
+                    '                    </div>';
+
+                $("#cardInfo").html(view);
+                $("#page").html(page);
+
+            } else {
+                window.location.href = "/html/login.html";
+            }
+        }, 'json');
+    }
+
+    function lock(id) {
+        $.get('/lockOrUnlock', {"cardId": id}, function (data) {
+            if (data.status == 200) {
+                $("#" + id).text(changeStatus(data.data.status));
+                alert("卡密解锁成功！");
+            } else {
+                window.location.href = "/html/login.html";
+            }
+        }, 'json');
+    }
+
+    function changeStatus(status) {
+        if (status == 1) {
+            return '正常';
+        } else {
+            return '锁定';
+        }
+    }
+
+    function changeTitle(status) {
+        if (status == 1) {
+            return '锁定卡密';
+        } else {
+            return '解锁卡密';
+        }
+    }
+
+    function change(status) {
+        if (status == 1) {
+            return '锁定';
+        } else {
+            return '解锁';
+        }
+    }
+
+</script>
+</html>

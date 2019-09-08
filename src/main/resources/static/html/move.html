@@ -1,0 +1,59 @@
+
+<!DOCTYPE html>
+<!-- saved from url=(0037)http://ls.dqqkp.com/index.php?do=move -->
+<html lang="en"><style type="text/css" id="19762177980"></style><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>卡密授权转赠</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link href="/css/home.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+    <link rel="shortcut icon" href="http://ls.dqqkp.com/favicon.ico">
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div id="wrapper">
+    <!-- Sidebar -->
+    <div id="nav">
+        <script>
+            $("#nav").load("/html/nav.html");
+        </script>
+    </div>
+    <!---->
+    <div id="wrapper wrapper-content" style="padding: 10px;">
+        <form>
+            <div class="form-group">
+                <label>手机号</label>
+                <input class="form-control" type="text" id="phone" name="phone" placeholder="填写对方手机号" value="">
+            </div>
+            <div class="form-group">
+                <label>卡密授权数量</label>
+                <input class="form-control" type="text" id="codenum" name="codenum" placeholder="填写转赠卡密数量">
+            </div>
+            <div class="form-group">
+                <button type="button" onclick="give()" class="btn btn-success">赠送卡密授权</button>
+            </div>
+        </form>
+    </div>
+    <!----><!---->
+</div>
+<script>
+    function give() {
+        var phone = $("#phone").val();
+        var num = $("#codeNum").val();
+        if(!phone||!num){
+            alert("手机号或数量不能为空！")
+        }
+        $.post("/change",{'phone':phone,'num':num},function (data) {
+            if (data.status==200) {
+                alert(data.msg);
+            }else {
+                alert("转增失败！");
+                window.location.href="/html/login.html"
+
+            }
+        },'json');
+    }
+</script>
+</body></html>

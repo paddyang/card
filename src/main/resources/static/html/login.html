@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html><style type="text/css" id="19762177980"></style><head lang="en"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="UTF-8">
+    <title>登录平台</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link href="/css/home.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+	<link rel="shortcut icon" href="http://ls.dqqkp.com/favicon.ico">
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            <h1>登录平台</h1>
+            <form class="form form-horizontal">
+                <div class="form-group">
+                    <label for="username">用户名</label>
+                    <input type="text" name="username" class="form-control" id="username" placeholder="用户名">
+                </div>
+                <div class="form-group">
+                    <label for="password">密码</label>
+                    <input type="password" name="password" class="form-control" id="password" placeholder="密码">
+                </div>
+                <input onclick="login()" type="button" name="btnsubmit" value="登录" class="btn btn-success">
+            </form>
+        </div>
+    </div>
+</div>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script>
+function login(){
+	var username = $("#username").val();
+	var password = $("#password").val();
+	if (!username || !password) {
+		alert("用户名或密码不能为空");
+	} else {
+		$.get('/login', {
+			username : username,
+			password : password,
+			time : 1487936597
+		}, function(data) {
+			if (data.status == 200){
+				//成功
+                sessionStorage.setItem("username",username);
+				window.location.href='/html/index.html';
+			} else {
+				alert(data.msg);
+			}
+		},'json');
+	}
+}
+</script>
+
+
+<!----><div id="KC_DIV_F" style="display: none; left: 331px; top: 200px; position: fixed; z-index: 9999; background: transparent;"><div id="KC_CLOSE_DIV" title="关闭" style="position: absolute; top: 0px; right: 0px; width: 42px; height: 33px; cursor: pointer; z-index: 9999;"></div><div id="KC_YOUHAO_DIV" style="position: absolute; top: 0px; left: 0px; width: 702px; height: 557px; z-index: 99999; background-color: transparent;"><div style="margin:0 auto;margin-top:150px;color:red;width:250px;font-size:20px;position: relative;"><img src="../png/loading2.gif"><div style="width:250px;height:50px;position: absolute;top:4px;left:40px;font-size: 17px;">正在努力加载...</div></div></div><div id="KC_TUO_DIV" style="position: absolute; top: 0px; left: 80px; width: 427px; height: 33px; cursor: move; z-index: 9999;"></div><iframe frameborder="0" scrolling="no" width="702" height="557" src=""></iframe></div></body></html>
