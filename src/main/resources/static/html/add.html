@@ -64,6 +64,7 @@
                 if (data.status==200) {
                     sessionStorage.setItem("remainCard",remainCard-codeNum);
                     alert("生成卡密成功！");
+                    window.location.href="/html/actno.html"
                 }else {
                     alert("生成卡密失败！");
                     window.location.href="/html/login.html"
