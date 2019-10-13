@@ -23,6 +23,8 @@ public class LogCheckServiceImpl implements LogCheckService {
     @Override
     public List<LogCheck> getCheckInfo() {
         LogCheckExample example=new LogCheckExample();
+        example.setOrderByClause("id desc");
+        example.setDistinct(true);
         return logCheckMapper.selectByExample(example);
     }
 

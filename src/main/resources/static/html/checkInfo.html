@@ -35,10 +35,10 @@
                 <tr>
                     <th>ID</th>
                     <th>卡密</th>
-                    <th>卡密类型</th>
+                    <th>类型</th>
                     <th>验证方式</th>
-                    <th>状态</th>
-                    <th>验证结果</th>
+                    <th>结果</th>
+                    <th>描述</th>
                     <th>生成时间</th>
                 </tr>
                 </thead>
@@ -79,7 +79,7 @@
     myPage(1);
 
     function myPage(pageNum){
-        $.get('/getCheckInfo', {"pageNum":pageNum},function (data) {
+        $.get('/getCheckInfo', {"pageNum":pageNum,"pageSize":20},function (data) {
             $('#cardInfo').empty();
             $('#page').empty();
             if (data.status == 200) {
