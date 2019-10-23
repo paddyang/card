@@ -3,7 +3,9 @@ package com.card.controller;
 import com.card.constant.CardStatusEnum;
 import com.card.constant.TypeEnum;
 import com.card.pojo.Card;
+import com.card.pojo.CardType;
 import com.card.pojo.User;
+import com.card.service.CardTypeService;
 import com.card.service.CardsService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -33,6 +35,9 @@ public class CardController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private CardTypeService cardTypeService;
 
     @Value("$(super.user)")
     private String superUser;
@@ -176,4 +181,25 @@ public class CardController {
         return GsonUtils.GsonString(BaseResponse.success(pageInfo));
     }
 
+    /**
+     * 获取全部卡密类型
+     * @return
+     */
+    @RequestMapping(value = "/getCardType",produces="text/json;charset=UTF-8")
+    public String getNotUsedCards(){
+        List<CardType> list=cardTypeService.getAllType();
+        return GsonUtils.GsonString(BaseResponse.success(list));
+    }
+
+    /**
+     * 新增卡密类型
+     * @param cardType
+     * @param name
+     * @return
+     */
+    @RequestMapping(value = "/addCardType",produces="text/json;charset=UTF-8")
+    public String addCardType(String cardType, String name){
+        cardTypeService.addCardType(cardType.toUpperCase(),name);
+        return GsonUtils.GsonString(BaseResponse.success());
+    }
 }

@@ -30,27 +30,11 @@
             <li class="active"><i class="fa fa-info"></i> 未使用卡密</li>
         </ol>
 
-        <div class="row">
-
+        <!--<div class="row">
             <div class="col-md-2">
                 <a href="allnouse.php" class="btn btn-warning">下载全部未用卡密</a>
             </div>
-            <!--  <div class="col-md-2">
-                <a href="xlsx.php" class="btn btn-warning">下载全部未用卡密</a>
-            </div>-->
-
-            <!--         <div class="col-md-6">
-                       <form action="./files/actno.html" method="post">
-                           <div class="form-group input-group">
-                               <input type="text" class="form-control" name="key" placeholder="输入激活码搜索">
-                               <span class="input-group-btn">
-                                   <input class="btn btn-default" type="submit" value="查询">
-                               </span>
-                           </div>
-                       </form>
-                   </div>-->
-
-        </div>
+        </div>-->
         <div class="table-responsive">
             <table class="table table-hover table-striped">
                 <thead>
@@ -122,7 +106,7 @@
                     view += '<tr></tr><td>'+list[i].id+'</td>\n' +
                         '                    <td><button class="button button-rounded button-tiny" data-clipboard-text="'+list[i].cardNo+'">'+list[i].cardNo+'</button></td>\n' +
                         '                    <td><span class="label label-warning">未用</span></td>\n' +
-                        '                    <td>'+list[i].safeCode+'</td>\n' +
+                        '                    <td>'+change(list[i].safeCode)+'</td>\n' +
                         '                    <td>'+list[i].createTime+'</td>\n' +
                         '                    <td>'+list[i].days+'</td></tr>';
                 }
@@ -142,6 +126,20 @@
                 window.location.href = "/html/login.html";
             }
         }, 'json');
+    }
+    var list;
+    $.get("/getCardType",{},function (data) {
+        if(data.status==200){
+            list = data.data;
+        }
+    },'json');
+    function change(id) {
+        for (var i=0;i<list.length;i++) {
+            var id1 = list[i].id;
+            if (id==id1) {
+                return list[i].name;
+            }
+        }
     }
 
 </script>

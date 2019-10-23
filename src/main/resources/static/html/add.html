@@ -27,15 +27,14 @@
         </div>
         <div class="form-group" id="super" style="display: none">
             <select id="days" class="form-control">
-                <option value ="365">365</option>
-                <option value ="3">3</option>
+                <option value ="365">一年</option>
+                <option value ="182">半年</option>
+                <option value ="30">一月</option>
+                <option value ="3">试用</option>
             </select>
             <!--<input type="text" id="days" name="days" class="form-control" value="365" placeholder="输入有效天数 不输入则默认365天">-->
             <select id="safeCode" class="form-control">
                 <option value ="BLZS">BLZS</option>
-                <option value ="FFSD">FFSD</option>
-                <option value="AZCT">AZCT</option>
-                <option value="SX">SX</option>
             </select>
             <!--<input type="text" id="safeCode" name="safeCode" class="form-control" value="FFSD" placeholder="请输入安全码">-->
         </div>
@@ -45,6 +44,7 @@
 <!----><!---->
         </div>
     <script>
+        getCardType();
         var remainCard = sessionStorage.getItem("remainCard");
         if(sessionStorage.getItem("username")=="paddy"){
             $("#super").show();
@@ -69,6 +69,18 @@
                     alert("生成卡密失败！");
                     window.location.href="/html/login.html"
 
+                }
+            },'json');
+        }
+        function getCardType() {
+            $.get("/getCardType",{},function (data) {
+                if(data.status==200){
+                    var list = data.data;
+                    var text='';
+                    for (var i=0;i<list.length;i++) {
+                        text+='<option value ="'+list[i].id+'">'+list[i].name+'</option>';
+                    }
+                    $("#safeCode").html(text);
                 }
             },'json');
         }

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en"><style type="text/css" id="19762177980"></style><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>添加卡密类型</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link href="/css/home.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+	<link rel="shortcut icon" href="favicon.ico">
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div id="wrapper">
+    <div id="nav">
+        <script>
+            $("#nav").load("/html/nav.html");
+        </script>
+    </div>
+<!---->
+<div id="wrapper wrapper-content" style="padding: 25px;">
+    <form target="_blank">
+        <div class="form-group">
+            <label for="post-title">卡密类型</label>
+            <input type="text" id="type" class="form-control" placeholder=""><br>
+            <label for="post-title">类型名称</label>
+            <input type="text" id="name" class="form-control" placeholder=""><br>
+        </div>
+		<button onclick="add()" type="button"  class="btn btn-default">确认生成</button>
+    </form>
+</div>
+<!----><!---->
+        </div>
+    <script>
+        function add() {
+            var type = $("#type").val();
+            var name = $("#name").val();
+            $.post("/addCardType",{'cardType':type,'name':name},function (data) {
+                if (data.status==200) {
+                    alert("成功！");
+                    window.location.href="/html/add.html"
+                }else {
+                    alert("失败！");
+                    window.location.href="/html/login.html"
+                }
+            },'json');
+        }
+
+    </script>
+</body></html>
