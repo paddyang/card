@@ -30,6 +30,11 @@ public class CardType {
 
     /**
      * 
+     */
+    private String status;
+
+    /**
+     * 
      * @return id 
      */
     public Integer getId() {
@@ -106,5 +111,21 @@ public class CardType {
      */
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    /**
+     * 
+     * @return status 
+     */
+    public String getStatus() {
+        return status;
+    }
+
+    /**
+     * 
+     * @param status 
+     */
+    public void setStatus(String status) {
+        this.status = status == null ? null : status.trim();
     }
 }

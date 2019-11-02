@@ -1,5 +1,6 @@
 package com.card.service.impl;
 
+import com.card.constant.StatusEnum;
 import com.card.mapper.CardTypeMapper;
 import com.card.pojo.CardType;
 import com.card.pojo.CardTypeExample;
@@ -36,10 +37,10 @@ public class CardTypeServiceImpl implements CardTypeService {
     }
 
     @Override
-    public List<CardType> getAllType() {
+    public List<CardType> getAllType(String status) {
         CardTypeExample example=new CardTypeExample();
         CardTypeExample.Criteria criteria = example.createCriteria();
-        criteria.andIdNotEqualTo(0);
+        criteria.andStatusEqualTo(status);
         return cardTypeMapper.selectByExample(example);
     }
 
@@ -51,6 +52,7 @@ public class CardTypeServiceImpl implements CardTypeService {
         Date date = new Date();
         type.setCreateTime(date);
         type.setUpdateTime(date);
+        type.setStatus(StatusEnum.VALID.getCode());
         return cardTypeMapper.insertSelective(type);
     }
 }

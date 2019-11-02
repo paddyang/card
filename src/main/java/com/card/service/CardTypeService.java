@@ -15,7 +15,7 @@ public interface CardTypeService {
 
     CardType getById(int id);
 
-    List<CardType> getAllType();
+    List<CardType> getAllType(String status);
 
     int addCardType(String cardType,String name);
 }

@@ -1,6 +1,8 @@
 package com.card.controller;
 
 import com.card.constant.CardStatusEnum;
+import com.card.constant.RedisKey;
+import com.card.constant.StatusEnum;
 import com.card.constant.TypeEnum;
 import com.card.pojo.Card;
 import com.card.pojo.CardType;
@@ -15,6 +17,10 @@ import com.card.utils.GsonUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.ListOperations;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,8 +45,16 @@ public class CardController {
     @Autowired
     private CardTypeService cardTypeService;
 
-    @Value("$(super.user)")
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
+
+    @Value("${super.user}")
     private String superUser;
+
+    @GetMapping(value = "/testConfig", produces="text/json;charset=UTF-8")
+    public String testConfig(){
+        return superUser;
+    }
 
     /**
      * 新增卡密
@@ -187,8 +201,13 @@ public class CardController {
      */
     @RequestMapping(value = "/getCardType",produces="text/json;charset=UTF-8")
     public String getNotUsedCards(){
-        List<CardType> list=cardTypeService.getAllType();
-        return GsonUtils.GsonString(BaseResponse.success(list));
+        String cardType = stringRedisTemplate.opsForValue().get(RedisKey.CARD_TYPE);
+        if (StringUtils.isBlank(cardType)){
+            List<CardType> list=cardTypeService.getAllType(StatusEnum.VALID.getCode());
+            cardType = GsonUtils.GsonString(BaseResponse.success(list));
+            stringRedisTemplate.opsForValue().set(RedisKey.CARD_TYPE,cardType);
+        }
+        return cardType;
     }
 
     /**
@@ -200,6 +219,12 @@ public class CardController {
     @RequestMapping(value = "/addCardType",produces="text/json;charset=UTF-8")
     public String addCardType(String cardType, String name){
         cardTypeService.addCardType(cardType.toUpperCase(),name);
+
+        //更redis缓存
+        List<CardType> allType = cardTypeService.getAllType(StatusEnum.VALID.getCode());
+        String cache = GsonUtils.GsonString(BaseResponse.success(allType));
+        stringRedisTemplate.opsForValue().set(RedisKey.CARD_TYPE,cache);
+
         return GsonUtils.GsonString(BaseResponse.success());
     }
 }
