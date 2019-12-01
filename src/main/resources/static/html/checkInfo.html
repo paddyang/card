@@ -37,6 +37,8 @@
                     <th>卡密</th>
                     <th>类型</th>
                     <th>验证方式</th>
+                    <th>验证UID</th>
+                    <th>绑定UID</th>
                     <th>结果</th>
                     <th>描述</th>
                     <th>生成时间</th>
@@ -91,6 +93,8 @@
                         '                    <td>'+list[i].card+'</td>\n' +
                         '                    <td>'+list[i].cardType+'</td>\n' +
                         '                    <td>'+checkType(list[i].checkType)+'</td>\n' +
+                        '                    <td>'+list[i].checkUid+'</td>\n' +
+                        '                    <td>'+list[i].uid+'</td>\n' +
                         '                    <td>'+status(list[i].status)+'</td>\n' +
                         '                    <td>'+list[i].mark+'</td>\n' +
                         '                    <td>'+list[i].created+'</td></tr>';

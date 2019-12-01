@@ -17,9 +17,7 @@ import com.card.utils.GsonUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,7 +44,7 @@ public class CardController {
     private CardTypeService cardTypeService;
 
     @Autowired
-    private StringRedisTemplate stringRedisTemplate;
+    private RedisTemplate redisTemplate;
 
     @Value("${super.user}")
     private String superUser;
@@ -201,13 +199,8 @@ public class CardController {
      */
     @RequestMapping(value = "/getCardType",produces="text/json;charset=UTF-8")
     public String getNotUsedCards(){
-        String cardType = stringRedisTemplate.opsForValue().get(RedisKey.CARD_TYPE);
-        if (StringUtils.isBlank(cardType)){
-            List<CardType> list=cardTypeService.getAllType(StatusEnum.VALID.getCode());
-            cardType = GsonUtils.GsonString(BaseResponse.success(list));
-            stringRedisTemplate.opsForValue().set(RedisKey.CARD_TYPE,cardType);
-        }
-        return cardType;
+        List<CardType> list=cardTypeService.getAllType(StatusEnum.VALID.getCode());
+        return GsonUtils.GsonString(BaseResponse.success(list));
     }
 
     /**
@@ -219,12 +212,8 @@ public class CardController {
     @RequestMapping(value = "/addCardType",produces="text/json;charset=UTF-8")
     public String addCardType(String cardType, String name){
         cardTypeService.addCardType(cardType.toUpperCase(),name);
-
-        //更redis缓存
-        List<CardType> allType = cardTypeService.getAllType(StatusEnum.VALID.getCode());
-        String cache = GsonUtils.GsonString(BaseResponse.success(allType));
-        stringRedisTemplate.opsForValue().set(RedisKey.CARD_TYPE,cache);
-
+        //清除redis缓存
+        redisTemplate.delete(RedisKey.CARD_TYPE);
         return GsonUtils.GsonString(BaseResponse.success());
     }
 }
