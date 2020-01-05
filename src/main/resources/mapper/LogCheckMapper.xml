@@ -9,6 +9,8 @@
     <result column="created" property="created" jdbcType="TIMESTAMP" />
     <result column="status" property="status" jdbcType="VARCHAR" />
     <result column="mark" property="mark" jdbcType="VARCHAR" />
+    <result column="uid" property="uid" jdbcType="VARCHAR" />
+    <result column="check_uid" property="checkUid" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -69,7 +71,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, card, card_type, check_type, created, status, mark
+    id, card, card_type, check_type, created, status, mark, uid, check_uid
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.card.pojo.LogCheckExample" >
     select
@@ -104,10 +106,12 @@
   <insert id="insert" parameterType="com.card.pojo.LogCheck" >
     insert into log_check (id, card, card_type, 
       check_type, created, status, 
-      mark)
+      mark, uid, check_uid
+      )
     values (#{id,jdbcType=BIGINT}, #{card,jdbcType=VARCHAR}, #{cardType,jdbcType=VARCHAR}, 
       #{checkType,jdbcType=VARCHAR}, #{created,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR}, 
-      #{mark,jdbcType=VARCHAR})
+      #{mark,jdbcType=VARCHAR}, #{uid,jdbcType=VARCHAR}, #{checkUid,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.card.pojo.LogCheck" >
     insert into log_check
@@ -133,6 +137,12 @@
       <if test="mark != null" >
         mark,
       </if>
+      <if test="uid != null" >
+        uid,
+      </if>
+      <if test="checkUid != null" >
+        check_uid,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -155,6 +165,12 @@
       </if>
       <if test="mark != null" >
         #{mark,jdbcType=VARCHAR},
+      </if>
+      <if test="uid != null" >
+        #{uid,jdbcType=VARCHAR},
+      </if>
+      <if test="checkUid != null" >
+        #{checkUid,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -188,6 +204,12 @@
       <if test="record.mark != null" >
         mark = #{record.mark,jdbcType=VARCHAR},
       </if>
+      <if test="record.uid != null" >
+        uid = #{record.uid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.checkUid != null" >
+        check_uid = #{record.checkUid,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -201,7 +223,9 @@
       check_type = #{record.checkType,jdbcType=VARCHAR},
       created = #{record.created,jdbcType=TIMESTAMP},
       status = #{record.status,jdbcType=VARCHAR},
-      mark = #{record.mark,jdbcType=VARCHAR}
+      mark = #{record.mark,jdbcType=VARCHAR},
+      uid = #{record.uid,jdbcType=VARCHAR},
+      check_uid = #{record.checkUid,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -227,6 +251,12 @@
       <if test="mark != null" >
         mark = #{mark,jdbcType=VARCHAR},
       </if>
+      <if test="uid != null" >
+        uid = #{uid,jdbcType=VARCHAR},
+      </if>
+      <if test="checkUid != null" >
+        check_uid = #{checkUid,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -237,7 +267,9 @@
       check_type = #{checkType,jdbcType=VARCHAR},
       created = #{created,jdbcType=TIMESTAMP},
       status = #{status,jdbcType=VARCHAR},
-      mark = #{mark,jdbcType=VARCHAR}
+      mark = #{mark,jdbcType=VARCHAR},
+      uid = #{uid,jdbcType=VARCHAR},
+      check_uid = #{checkUid,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

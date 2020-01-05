@@ -39,6 +39,16 @@ public class LogCheck {
     private String mark;
 
     /**
+     * 原绑定uid
+     */
+    private String uid;
+
+    /**
+     * 
+     */
+    private String checkUid;
+
+    /**
      * 
      * @return id 
      */
@@ -150,15 +160,35 @@ public class LogCheck {
         this.mark = mark == null ? null : mark.trim();
     }
 
-    public LogCheck() {
+    /**
+     * 原绑定uid
+     * @return uid 原绑定uid
+     */
+    public String getUid() {
+        return uid;
     }
 
-    public LogCheck(String card, String cardType, String checkType, Date created, String status, String mark) {
-        this.card = card;
-        this.cardType = cardType;
-        this.checkType = checkType;
-        this.created = created;
-        this.status = status;
-        this.mark = mark;
+    /**
+     * 原绑定uid
+     * @param uid 原绑定uid
+     */
+    public void setUid(String uid) {
+        this.uid = uid == null ? null : uid.trim();
+    }
+
+    /**
+     * 
+     * @return check_uid 
+     */
+    public String getCheckUid() {
+        return checkUid;
+    }
+
+    /**
+     * 
+     * @param checkUid 
+     */
+    public void setCheckUid(String checkUid) {
+        this.checkUid = checkUid == null ? null : checkUid.trim();
     }
 }

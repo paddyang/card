@@ -583,6 +583,146 @@ public class LogCheckExample {
             addCriterion("mark not between", value1, value2, "mark");
             return (Criteria) this;
         }
+
+        public Criteria andUidIsNull() {
+            addCriterion("uid is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUidIsNotNull() {
+            addCriterion("uid is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUidEqualTo(String value) {
+            addCriterion("uid =", value, "uid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUidNotEqualTo(String value) {
+            addCriterion("uid <>", value, "uid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUidGreaterThan(String value) {
+            addCriterion("uid >", value, "uid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUidGreaterThanOrEqualTo(String value) {
+            addCriterion("uid >=", value, "uid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUidLessThan(String value) {
+            addCriterion("uid <", value, "uid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUidLessThanOrEqualTo(String value) {
+            addCriterion("uid <=", value, "uid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUidLike(String value) {
+            addCriterion("uid like", value, "uid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUidNotLike(String value) {
+            addCriterion("uid not like", value, "uid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUidIn(List<String> values) {
+            addCriterion("uid in", values, "uid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUidNotIn(List<String> values) {
+            addCriterion("uid not in", values, "uid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUidBetween(String value1, String value2) {
+            addCriterion("uid between", value1, value2, "uid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUidNotBetween(String value1, String value2) {
+            addCriterion("uid not between", value1, value2, "uid");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckUidIsNull() {
+            addCriterion("check_uid is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckUidIsNotNull() {
+            addCriterion("check_uid is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckUidEqualTo(String value) {
+            addCriterion("check_uid =", value, "checkUid");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckUidNotEqualTo(String value) {
+            addCriterion("check_uid <>", value, "checkUid");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckUidGreaterThan(String value) {
+            addCriterion("check_uid >", value, "checkUid");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckUidGreaterThanOrEqualTo(String value) {
+            addCriterion("check_uid >=", value, "checkUid");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckUidLessThan(String value) {
+            addCriterion("check_uid <", value, "checkUid");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckUidLessThanOrEqualTo(String value) {
+            addCriterion("check_uid <=", value, "checkUid");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckUidLike(String value) {
+            addCriterion("check_uid like", value, "checkUid");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckUidNotLike(String value) {
+            addCriterion("check_uid not like", value, "checkUid");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckUidIn(List<String> values) {
+            addCriterion("check_uid in", values, "checkUid");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckUidNotIn(List<String> values) {
+            addCriterion("check_uid not in", values, "checkUid");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckUidBetween(String value1, String value2) {
+            addCriterion("check_uid between", value1, value2, "checkUid");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckUidNotBetween(String value1, String value2) {
+            addCriterion("check_uid not between", value1, value2, "checkUid");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

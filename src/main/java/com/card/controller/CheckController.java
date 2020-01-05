@@ -163,7 +163,10 @@ public class CheckController {
             logCheck.setCardType(type);
             logCheck.setCreated(new Date());
             logCheck.setMark(codeEnum.getDesc());
-
+            if (null != card.getUid()) {
+                logCheck.setUid(card.getUid());
+            }
+            logCheck.setCheckUid(b);
             //如果验证失败,ip记录redis
             if (!codeEnum.getCode().equals(ReturnCodeEnum.OK.getCode())){
                 redisTemplate.opsForValue().set(RedisKey.IP_CHECK+ipAddress,a,10,TimeUnit.SECONDS);
