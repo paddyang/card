@@ -16,6 +16,7 @@ import com.card.utils.GsonUtils;
 import com.card.utils.HttpUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -142,6 +143,16 @@ public class CheckController {
                 logCheck.setStatus("1");
                 codeEnum=ReturnCodeEnum.OK;
             }else
+            //校验是否是解绑卡密
+            if ("unbind".equals(card.getUid())){
+                //重新绑定
+                cardsService.updateUid(card.getId(),b);
+                //清除缓存
+                redisTemplate.delete(RedisKey.CARD_INFO+a);
+                logCheck.setCheckType("2");
+                logCheck.setStatus("2");
+                codeEnum=ReturnCodeEnum.OK;
+            }else
             //校验激活码和机器码是否一致
             if (!card.getUid().equals(b)) {
                 logCheck.setCheckType("2");
@@ -199,5 +210,31 @@ public class CheckController {
         PageInfo<LogCheck> pageInfo = new PageInfo<>(list);
         return GsonUtils.GsonString(BaseResponse.success(pageInfo));
     }
+
+    /**
+     * 激活码查询
+     * @param cardNo
+     * @return
+     */
+    @RequestMapping(value = "/cardInfo/{type}", produces = "text/json;charset=UTF-8")
+    public String cardInfo(String cardNo,@PathVariable String type){
+        if (StringUtils.isBlank(cardNo)){
+            return GsonUtils.GsonString(BaseResponse.build(400,"激活码不能为空！"));
+        }
+        Card card = (Card) redisTemplate.opsForValue().get(RedisKey.CARD_INFO + cardNo);
+        if (null == card){
+            card =cardsService.getByCardNoAndType(cardNo,type);
+            if (null == card){
+                return GsonUtils.GsonString(BaseResponse.build(400,"激活码不存在！"));
+            }else{
+                redisTemplate.opsForValue().set(RedisKey.CARD_INFO + cardNo, card, RedisKey.CARD_INFO_EXPIRE, TimeUnit.SECONDS);
+            }
+        }
+        return GsonUtils.GsonString(BaseResponse.success(card));
+    }
+
+
+
+
 
 }

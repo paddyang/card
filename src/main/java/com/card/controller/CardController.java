@@ -216,4 +216,27 @@ public class CardController {
         redisTemplate.delete(RedisKey.CARD_TYPE);
         return GsonUtils.GsonString(BaseResponse.success());
     }
+
+    /**
+     * 解绑卡密
+     * @param cardNo
+     * @param cardType
+     * @return
+     */
+    @RequestMapping(value = "/updateUid",produces="text/json;charset=UTF-8")
+    public String updateUid(String cardNo,String cardType){
+        if (StringUtils.isBlank(cardNo) || StringUtils.isBlank(cardType)){
+            return GsonUtils.GsonString(BaseResponse.build(400,"卡密不能为空"));
+        }
+        Card card = cardsService.getByCardNoAndType(cardNo, cardType);
+        if (null == card){
+            return GsonUtils.GsonString(BaseResponse.build(400,"卡密或类型错误"));
+        }
+        cardsService.updateUid(card.getId(),"unbind");
+        //清除redis缓存
+        redisTemplate.delete(RedisKey.CARD_INFO+cardNo);
+        return GsonUtils.GsonString(BaseResponse.success());
+    }
+
+
 }

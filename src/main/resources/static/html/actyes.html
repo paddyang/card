@@ -13,6 +13,7 @@
     <script src="/js/jquery.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
     <script src="/js/clipboard.min.js"></script>
+    <script src="/js/common.js"></script>
 </head>
 <body>
 <div id="wrapper">
@@ -107,7 +108,7 @@
                         '                    <td>' + list[i].id + '</td>\n' +
                         '                    <td>' + list[i].cardNo + '</td>\n' +
                         '                    <td><span class="label label-success" id="'+list[i].id+'">' + changeStatus(list[i].status) + '</span></td>\n' +
-                        '                    <td>' + list[i].safeCode + '</td>\n' +
+                        '                    <td>' + changeIdToName(list[i].safeCode) + '</td>\n' +
                         '                    <td>' + list[i].createTime + '</td>\n' +
                         '                    <td>' + list[i].useTime + '</td>\n' +
                         '                    <td><span class="label label-info">'+changeStatus(list[i].status)+'</span>&nbsp;&nbsp;<a style="text-decoration:none"\n' +

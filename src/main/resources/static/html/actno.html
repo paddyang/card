@@ -14,6 +14,7 @@
     <script src="clipboard.min.js"></script>
     <script src="/js/jquery.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/common.js"></script>
 </head>
 <body>
 <div id="wrapper">
@@ -106,7 +107,7 @@
                     view += '<tr></tr><td>'+list[i].id+'</td>\n' +
                         '                    <td><button class="button button-rounded button-tiny" data-clipboard-text="'+list[i].cardNo+'">'+list[i].cardNo+'</button></td>\n' +
                         '                    <td><span class="label label-warning">未用</span></td>\n' +
-                        '                    <td>'+change(list[i].safeCode)+'</td>\n' +
+                        '                    <td>'+changeIdToName(list[i].safeCode)+'</td>\n' +
                         '                    <td>'+list[i].createTime+'</td>\n' +
                         '                    <td>'+list[i].days+'</td></tr>';
                 }
@@ -126,20 +127,6 @@
                 window.location.href = "/html/login.html";
             }
         }, 'json');
-    }
-    var list;
-    $.get("/getCardType",{},function (data) {
-        if(data.status==200){
-            list = data.data;
-        }
-    },'json');
-    function change(id) {
-        for (var i=0;i<list.length;i++) {
-            var id1 = list[i].id;
-            if (id==id1) {
-                return list[i].name;
-            }
-        }
     }
 
 </script>

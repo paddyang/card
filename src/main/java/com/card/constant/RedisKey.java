@@ -23,6 +23,11 @@ public class RedisKey {
     public static final int CARD_INFO_EXPIRE=60*60*24;
 
     /**
+     * ip过期时间
+     */
+    public static final int IP_CHECK_EXPIRE=10;
+
+    /**
      * 验证失败限定的key
      */
     public static final String IP_CHECK="ip_address:";

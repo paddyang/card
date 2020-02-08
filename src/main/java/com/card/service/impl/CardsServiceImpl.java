@@ -8,6 +8,7 @@ import com.card.service.CardsService;
 import com.card.utils.IDUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
@@ -115,5 +116,24 @@ public class CardsServiceImpl implements CardsService {
         criteria.andStatusEqualTo(CardStatusEnum.NOT_ACTIVE.getCode());
         criteria.andIsOkEqualTo(0);
         return cardMapper.selectByExample(example);
+    }
+
+    @Override
+    public Card getByCardNoAndType(String cardNo, String safeCode) {
+        CardExample example = new CardExample();
+        CardExample.Criteria criteria = example.createCriteria();
+        criteria.andCardNoEqualTo(cardNo);
+        criteria.andSafeCodeEqualTo(safeCode.toUpperCase());
+        List<Card> cards = cardMapper.selectByExample(example);
+        return cards.size() == 0 ? null : cards.get(0);
+    }
+
+    @Override
+    public void updateUid(Integer id, String b) {
+        Card card = new Card();
+        card.setId(id);
+        card.setUid(b);
+        card.setUpdateTime(new Date());
+        cardMapper.updateByPrimaryKeySelective(card);
     }
 }

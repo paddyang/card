@@ -76,4 +76,13 @@ public interface CardsService {
      * @return
      */
     List<Card> getNotUsedCards(int userId);
+
+    Card getByCardNoAndType(String cardNo, String type);
+
+    /**
+     * 更新uid
+     * @param id
+     * @param b
+     */
+    void updateUid(Integer id, String b);
 }
