@@ -13,6 +13,7 @@
     <link rel="shortcut icon" href="http://ls.dqqkp.com/favicon.ico">
     <script src="/js/jquery.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/common.js"></script>
 </head>
 <body>
 <div id="wrapper">
@@ -33,9 +34,12 @@
                 <label>昵称(<font color="red">必填</font>)</label>
                 <input class="form-control" type="text" id="nickname" name="nickname" placeholder="昵称——后台显示">
             </div>
-            <div class="form-group" id="userType" style="display: none">
-                <label>类型(<font color="red">必填</font>)</label>
-                <input class="form-control" type="text" id="type" name="type" value="" placeholder="用户类型">
+            <div class="form-group" id="userType">
+                <label>类型</label>
+<!--                <input class="form-control" type="text" id="type" name="type" value="" placeholder="用户类型">-->
+                <select id="safeCode" class="form-control">
+                    <!--                <option value ="BLZS">BLZS</option>-->
+                </select>
             </div>
             <div class="alert alert-danger" role="alert">
                 为防止资源浪费，默认创建的代理卡密数量为0，用户默认密码 123456 创建后请在授权转赠中为新代理增加授权数量，并通知代理修改默认密码。
@@ -48,9 +52,21 @@
     <!----><!---->
 </div>
 <script>
-    if(sessionStorage.getItem("username")=="paddy"){
-        $("#userType").show();
+    getCardType();
+
+    function getCardType() {
+        $.get("/getCardType",{},function (data) {
+            if(data.status==200){
+                var list = data.data;
+                var text='';
+                for (var i=0;i<list.length;i++) {
+                    text+='<option value ="'+list[i].id+'">'+list[i].name+'</option>';
+                }
+                $("#safeCode").html(text);
+            }
+        },'json');
     }
+
     function addAgent(){
         var phone = $("#phone").val();
         var type = $("#type").val();

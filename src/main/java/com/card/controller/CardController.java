@@ -17,6 +17,7 @@ import com.card.utils.GsonUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -194,11 +196,32 @@ public class CardController {
     }
 
     /**
-     * 获取全部卡密类型
+     * 获取用户的卡密类型
      * @return
      */
     @RequestMapping(value = "/getCardType",produces="text/json;charset=UTF-8")
-    public String getNotUsedCards(){
+    public String getCardType(HttpSession session){
+        List<CardType> list=cardTypeService.getAllType(StatusEnum.VALID.getCode());
+        String username = (String) session.getAttribute("username");
+        User user = userService.getByUsername(username);
+        if (!user.getType().equalsIgnoreCase("ALL")){
+            for (CardType cardType:list) {
+                if (cardType.getCardType().equals(user.getType())){
+                    ArrayList<CardType> types = new ArrayList<>();
+                    types.add(cardType);
+                    return GsonUtils.GsonString(BaseResponse.success(types));
+                }
+            }
+        }
+        return GsonUtils.GsonString(BaseResponse.success(list));
+    }
+
+    /**
+     * 获取所有卡密类型
+     * @return
+     */
+    @RequestMapping(value = "/getAllCardType",produces="text/json;charset=UTF-8")
+    public String getAllCardType(HttpSession session){
         List<CardType> list=cardTypeService.getAllType(StatusEnum.VALID.getCode());
         return GsonUtils.GsonString(BaseResponse.success(list));
     }
@@ -210,7 +233,12 @@ public class CardController {
      * @return
      */
     @RequestMapping(value = "/addCardType",produces="text/json;charset=UTF-8")
-    public String addCardType(String cardType, String name){
+    public String addCardType(HttpSession session,String cardType, String name){
+        String username = (String) session.getAttribute("username");
+        User user = userService.getByUsername(username);
+        if (!user.getType().equalsIgnoreCase("ALL")){
+            return GsonUtils.GsonString(BaseResponse.build(400,"您没有权限！"));
+        }
         cardTypeService.addCardType(cardType.toUpperCase(),name);
         //清除redis缓存
         redisTemplate.delete(RedisKey.CARD_TYPE);

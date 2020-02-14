@@ -40,8 +40,8 @@
                     alert("成功！");
                     window.location.href="/html/add.html"
                 }else {
-                    alert("失败！");
-                    window.location.href="/html/login.html"
+                    alert(data.msg);
+                    //window.location.href="/html/login.html"
                 }
             },'json');
         }

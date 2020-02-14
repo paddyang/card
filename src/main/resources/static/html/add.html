@@ -22,10 +22,10 @@
     <form target="_blank">
         <div class="form-group">
             <label for="post-title">生成卡密</label>
-            <span class="label label-success">剩余<span id="remainCard">0</span>个</span>
+<!--            <span class="label label-success">剩余<span id="remainCard">0</span>个</span>-->
             <input type="text" id="codeNum" name="codeNum" class="form-control" placeholder="输入生成个数 不输入则默认生成1个"><br>
         </div>
-        <div class="form-group" id="super" style="display: none">
+        <div class="form-group" id="super">
             <select id="days" class="form-control">
                 <option value ="365">一年</option>
                 <option value ="182">半年</option>
@@ -45,11 +45,7 @@
         </div>
     <script>
         getCardType();
-        var remainCard = sessionStorage.getItem("remainCard");
-        if(sessionStorage.getItem("username")=="paddy"){
-            $("#super").show();
-        }
-        $("#remainCard").text(remainCard);
+
         function add() {
             var codeNum = $("#codeNum").val();
             var days = $("#days").val();
