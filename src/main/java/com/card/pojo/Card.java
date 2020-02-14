@@ -2,10 +2,11 @@ package com.card.pojo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Card {
+public class Card implements Serializable {
     /**
      * 
      */

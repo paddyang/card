@@ -37,10 +37,10 @@ function login(){
 	if (!username || !password) {
 		alert("用户名或密码不能为空");
 	} else {
-		$.get('/login', {
+		$.post('/login', {
 			username : username,
 			password : password,
-			time : 1487936597
+			//time : 1487936597
 		}, function(data) {
 			if (data.status == 200){
 				//成功

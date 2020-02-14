@@ -19,6 +19,7 @@ public class LoginInterceptor implements HandlerInterceptor {
 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+		response.setContentType("application/json;charset=utf-8");
 		//获取当前登录用户
 		String username = (String) request.getSession().getAttribute("username");
 		if (StringUtils.isBlank(username)) {

@@ -229,7 +229,7 @@ public class UserController {
             }
             String username = (String) session.getAttribute("username");
             User user = userService.getByUsername(username);
-            if (!user.getType().equals(phoneUser.getType())) {
+            if (!user.getType().equals(phoneUser.getType()) && !user.getType().equalsIgnoreCase("ALL")) {
                 return GsonUtils.GsonString(BaseResponse.build(200, "用户类型不匹配!"));
             }
             //转增

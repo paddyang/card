@@ -1,8 +1,9 @@
 package com.card.pojo;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class LogCheck {
+public class LogCheck implements Serializable {
     /**
      * 
      */
