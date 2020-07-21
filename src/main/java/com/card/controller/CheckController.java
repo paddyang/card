@@ -77,17 +77,7 @@ public class CheckController {
             if (null != o){
                 return "操作频繁!";
             }
-
-            CardType cardType = (CardType) redisTemplate.opsForHash().get(RedisKey.CARD_TYPE,type.toUpperCase());
-            if (null==cardType) {
-                cardType = cardTypeService.getByCardType(type.toUpperCase());
-                List<CardType> allType = cardTypeService.getAllType(StatusEnum.VALID.getCode());
-                HashMap<String, CardType> map = new HashMap<>();
-                for (CardType ct :allType) {
-                    map.put(ct.getCardType(),ct);
-                }
-                redisTemplate.opsForHash().putAll(RedisKey.CARD_TYPE,map);
-            }
+            CardType cardType = cardTypeService.getByCardType(type.toUpperCase());
             Integer id = cardType.getId();
             type = cardType.getCardType();
 

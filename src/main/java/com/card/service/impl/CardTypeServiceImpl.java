@@ -1,14 +1,17 @@
 package com.card.service.impl;
 
+import com.card.constant.RedisKey;
 import com.card.constant.StatusEnum;
 import com.card.mapper.CardTypeMapper;
 import com.card.pojo.CardType;
 import com.card.pojo.CardTypeExample;
 import com.card.service.CardTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -22,9 +25,26 @@ public class CardTypeServiceImpl implements CardTypeService {
     @Autowired
     private CardTypeMapper cardTypeMapper;
 
+    @Autowired
+    private RedisTemplate redisTemplate;
+
 
     @Override
-    public CardType getByCardType(String cardType) {
+    public CardType getByCardType(String type) {
+        CardType cardType = (CardType) redisTemplate.opsForHash().get(RedisKey.CARD_TYPE,type);
+        if (null==cardType) {
+            cardType = getCardType(type);
+            List<CardType> allType = getAllType(StatusEnum.VALID.getCode());
+            HashMap<String, CardType> map = new HashMap<>();
+            for (CardType ct :allType) {
+                map.put(ct.getCardType(),ct);
+            }
+            redisTemplate.opsForHash().putAll(RedisKey.CARD_TYPE,map);
+        }
+        return cardType;
+    }
+
+    private CardType getCardType(String cardType) {
         CardTypeExample example=new CardTypeExample();
         CardTypeExample.Criteria criteria = example.createCriteria();
         criteria.andCardTypeEqualTo(cardType);
@@ -55,4 +75,6 @@ public class CardTypeServiceImpl implements CardTypeService {
         type.setStatus(StatusEnum.VALID.getCode());
         return cardTypeMapper.insertSelective(type);
     }
+
+
 }
