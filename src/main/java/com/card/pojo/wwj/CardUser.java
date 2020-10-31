@@ -2,14 +2,23 @@ package com.card.pojo.wwj;
 
 import java.io.Serializable;
 
-public class LoginVo implements Serializable {
+public class CardUser implements Serializable {
 
+    private Integer id;
     private String deviceType;
     private String telInfo;
     private String platformType;
     private String version;
     private String deviceId;
     private String account;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public void setDeviceType(String deviceType) {
         this.deviceType = deviceType;

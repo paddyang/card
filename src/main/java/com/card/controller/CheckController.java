@@ -20,16 +20,14 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -223,8 +221,28 @@ public class CheckController {
         return GsonUtils.GsonString(BaseResponse.success(card));
     }
 
-
-
+    /**
+     * 苹果专用验证授权
+     * @param request
+     * @param type
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "/checki/{type}", produces = "application/json;charset=UTF-8")
+    public Map<String,String> checki(HttpServletRequest request,@PathVariable String type, @RequestBody Map<String,String> param) {
+        System.out.println(GsonUtils.GsonString(param));
+        Map<String,String> resultMap = new HashMap<>();
+        String code = param.get("code");
+        String udid = param.get("udid");
+        String result = checkCommon(request, type, code, udid);
+        if (ReturnCodeEnum.OK.getCode().equals(result)){
+            resultMap.put("code","200");
+        }else{
+            resultMap.put("code","400");
+        }
+        resultMap.put("msg",result);
+        return resultMap;
+    }
 
 
 }

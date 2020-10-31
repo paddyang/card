@@ -129,6 +129,16 @@ public class CardsServiceImpl implements CardsService {
     }
 
     @Override
+    public Card getByUidAndType(String uid, String safeCode) {
+        CardExample example = new CardExample();
+        CardExample.Criteria criteria = example.createCriteria();
+        criteria.andUidEqualTo(uid);
+        criteria.andSafeCodeEqualTo(safeCode.toUpperCase());
+        List<Card> cards = cardMapper.selectByExample(example);
+        return cards.size() == 0 ? null : cards.get(0);
+    }
+
+    @Override
     public void updateUid(Integer id, String b) {
         Card card = new Card();
         card.setId(id);

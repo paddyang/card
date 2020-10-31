@@ -1,30 +1,29 @@
 package com.card.controller;
 
-import com.alibaba.fastjson.JSONObject;
 import com.card.constant.CardStatusEnum;
 import com.card.pojo.Card;
 import com.card.pojo.DiyResp;
 import com.card.pojo.wwj.BindAvtCode;
-import com.card.pojo.wwj.LoginVo;
+import com.card.pojo.wwj.CardUser;
+import com.card.pojo.wwj.PlayerInfo;
 import com.card.service.CardTypeService;
+import com.card.service.CardUserService;
 import com.card.service.CardsService;
 import com.card.service.DiyRespService;
 import com.card.utils.BaseResp;
-import com.card.utils.BaseResponse;
 import com.card.utils.EncrypUtil;
 import com.card.utils.GsonUtils;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Map;
 
 @RestController
@@ -44,6 +43,9 @@ public class DiyRespController {
 
     @Autowired
     private CardTypeService cardTypeService;
+
+    @Autowired
+    private CardUserService cardUserService;
 
     /**
      * diy返回结果
@@ -88,7 +90,7 @@ public class DiyRespController {
 
 
     @RequestMapping(value = "/bindAvtcode")
-    public String bindAvtCode(HttpServletRequest request,String data){
+    public String bindAvtCode(String data){
         String cardType="WWJ";
         String aesKey = stringRedisTemplate.opsForValue().get("AES_KEY");
         String decrypt = EncrypUtil.aesDecrypt(data,aesKey);
@@ -97,18 +99,18 @@ public class DiyRespController {
         //激活操作
         Card wwj = cardsService.getByCardNoAndType(bindAvtCode.getAvtCode(), cardTypeService.getByCardType(cardType).getId().toString());
         if (null==wwj){
-            return GsonUtils.GsonString(BaseResp.build(400,"激活码错误"));
+            return GsonUtils.GsonString(BaseResp.build(400,"no this code"));
         }
 
         if (CardStatusEnum.NOT_ACTIVE.getCode()==wwj.getStatus()){
-            cardsService.activate(CardStatusEnum.ACTIVATED.getCode(),bindAvtCode.getPlayerId());
-            return GsonUtils.GsonString(BaseResp.success("激活成功"));
+            cardsService.activate(wwj.getId(),bindAvtCode.getPlayerId());
+            return GsonUtils.GsonString(BaseResp.success());
         }
 
         if (CardStatusEnum.ACTIVATED.getCode()==wwj.getStatus()){
-            return GsonUtils.GsonString(BaseResp.success("激活码已被使用"));
+            return GsonUtils.GsonString(BaseResp.success());
         }
-        return GsonUtils.GsonString(BaseResp.build(400,"激活码不可用"));
+        return GsonUtils.GsonString(BaseResp.build(400,"code error"));
     }
 
     @RequestMapping(value = "/login")
@@ -116,19 +118,65 @@ public class DiyRespController {
         String aesKey = stringRedisTemplate.opsForValue().get("AES_KEY");
         String decrypt = EncrypUtil.aesDecrypt(data,aesKey);
         logger.info("---login---input---{}",decrypt);
-        LoginVo loginVo = GsonUtils.GsonToBean(decrypt, LoginVo.class);
-        //登录操作
-        loginVo.getAccount();
-        if (true) {
-            DiyResp wwjpass = diyRespService.getByPath("wwjpass");
-            String encrypt = EncrypUtil.aesEncrypt(wwjpass.getOutput(), aesKey);
-            logger.info("---login---output---{}",wwjpass.getOutput());
+        CardUser cardUser = GsonUtils.GsonToBean(decrypt, CardUser.class);
+        CardUser user = cardUserService.getCardUser(cardUser.getDeviceId());
+
+        DiyResp wwjpass = diyRespService.getByPath("wwjpass");
+        PlayerInfo playerInfo = GsonUtils.GsonToBean(wwjpass.getOutput(), PlayerInfo.class);
+
+        boolean flag=false;
+        if (null == user){
+            cardUserService.insert(cardUser);
+            playerInfo.setPlayerId(cardUser.getId().toString());
+            playerInfo.setFeatures("0");
+            playerInfo.setAvtCodeStatus(true);
+            playerInfo.setExpires("请先激活！");
+            playerInfo.setAccount(cardUser.getAccount());
+            String output = GsonUtils.GsonString(playerInfo);
+            String encrypt = EncrypUtil.aesEncrypt(output, aesKey);
+            logger.info("---login---output---{}",output);
             return GsonUtils.GsonString(BaseResp.success(encrypt));
         }
-        DiyResp wwjnopass = diyRespService.getByPath("wwjnopass");
+        //登录操作
+        Integer id = user.getId();
+        Card wwj = cardsService.getByUidAndType(id.toString(), cardTypeService.getByCardType("WWJ").getId().toString());
+        if (null==wwj){
+            playerInfo.setPlayerId(id.toString());
+            playerInfo.setFeatures("0");
+            playerInfo.setAvtCodeStatus(true);
+            playerInfo.setExpires("请先充值！");
+            playerInfo.setAccount(cardUser.getAccount());
+            String output = GsonUtils.GsonString(playerInfo);
+            String encrypt = EncrypUtil.aesEncrypt(output, aesKey);
+            logger.info("---login---output---{}",output);
+            return GsonUtils.GsonString(BaseResp.success(encrypt));
+        }
+        //激活码锁定
+        if (CardStatusEnum.LOCKED.getCode()==wwj.getStatus()){
+            playerInfo.setFeatures("0");
+            playerInfo.setAvtCodeStatus(true);
+        }
+        //卡密到期时间
+        Calendar c = Calendar.getInstance();
+        if(null != wwj.getUseTime()){
+            c.setTime(wwj.getUseTime());
+            c.add(Calendar.DATE, wwj.getDays());
+        }
+        if (c.getTime().before(new Date())){
+            playerInfo.setFeatures("0");
+            playerInfo.setAvtCodeStatus(true);
+        }
+        playerInfo.setPlayerId(id.toString());
+        playerInfo.setAccount(cardUser.getAccount());
+        String output = GsonUtils.GsonString(playerInfo);
+        String encrypt = EncrypUtil.aesEncrypt(output, aesKey);
+        logger.info("---login---output---{}",output);
+        return GsonUtils.GsonString(BaseResp.success(encrypt));
+
+        /*DiyResp wwjnopass = diyRespService.getByPath("wwjnopass");
         String encrypt = EncrypUtil.aesEncrypt(wwjnopass.getOutput(), aesKey);
         logger.info("---login---output---{}",wwjnopass.getOutput());
-        return GsonUtils.GsonString(BaseResp.success(encrypt));
+        return GsonUtils.GsonString(BaseResp.success(encrypt));*/
     }
 
 

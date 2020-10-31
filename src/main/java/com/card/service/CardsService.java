@@ -79,6 +79,8 @@ public interface CardsService {
 
     Card getByCardNoAndType(String cardNo, String type);
 
+    Card getByUidAndType(String uid,String type);
+
     /**
      * 更新uid
      * @param id
