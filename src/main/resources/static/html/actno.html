@@ -67,7 +67,7 @@
         </div>
         <div class="row">
             <div class="col-lg-12 text-center">
-                <button class="button button-rounded button-tiny" data-clipboard-text="<?echo $kamilist;?>">复制当前页卡密
+                <button class="button button-rounded button-tiny" onclick="a()">复制当前页卡密
                 </button>
                 <ul class="pagination" id="page">
                     <div>
@@ -80,17 +80,19 @@
     <!----><!---->
 </div>
 <script>
-    var btns = document.querySelectorAll('button');
-    var clipboard = new Clipboard(btns);
+    function initClipboard() {
+        var btns = document.querySelectorAll('button');
+        var clipboard = new Clipboard(btns);
 
-    clipboard.on('success', function (e) {
-        console.log(e);
-        alert("卡密复制成功");
-    });
+        clipboard.on('success', function (e) {
+            console.log(e);
+            alert("卡密复制成功");
+        });
 
-    clipboard.on('error', function (e) {
-        console.log(e);
-    });
+        clipboard.on('error', function (e) {
+            console.log(e);
+        });
+    }
 </script>
 <script>
     myPage(1);
@@ -122,13 +124,26 @@
 
                 $("#cardInfo").html(view);
                 $("#page").html(page);
-
+                //初始化复制剪切板
+                initClipboard();
             } else {
                 window.location.href = "/html/login.html";
             }
         }, 'json');
     }
 
+    function a(){
+        var box = document.querySelectorAll("button");
+        // 获取所有子节点
+        var allNodeList = box;
+        console.log(allNodeList);
+        var newList = "";
+        for (var i = 0; i < allNodeList.length; i++) {
+            var node = allNodeList[i];
+            newList+=node.val();
+        }
+        alert(newList);
+    }
 </script>
 </body>
 </html>
