@@ -58,7 +58,7 @@
             }
             $.post("/add",{'num':codeNum,'days':days,'safeCode':safeCode},function (data) {
                 if (data.status==200) {
-                    sessionStorage.setItem("remainCard",remainCard-codeNum);
+                    //sessionStorage.setItem("remainCard",codeNum);
                     alert("生成卡密成功！");
                     window.location.href="/html/actno.html"
                 }else {
