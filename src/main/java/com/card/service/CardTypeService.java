@@ -18,4 +18,6 @@ public interface CardTypeService {
     List<CardType> getAllType(String status);
 
     int addCardType(String cardType,String name);
+
+    int updateById(int id);
 }

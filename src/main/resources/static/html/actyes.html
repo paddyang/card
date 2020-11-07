@@ -50,8 +50,8 @@
                     <th>状态</th>
                     <th>标识</th>
                     <th>生成时间</th>
-                    <!---->
                     <th>使用时间</th>
+                    <th>有效期</th>
                     <th>操作</th>
                     <!---->
                 </tr>
@@ -111,6 +111,7 @@
                         '                    <td>' + changeIdToName(list[i].safeCode) + '</td>\n' +
                         '                    <td>' + list[i].createTime + '</td>\n' +
                         '                    <td>' + list[i].useTime + '</td>\n' +
+                        '                    <td>' + list[i].days + '</td>\n' +
                         '                    <td><span class="label label-info">'+changeStatus(list[i].status)+'</span>&nbsp;&nbsp;<a style="text-decoration:none"\n' +
                         '                                                                              onclick="lock('+list[i].id+')" href="javascript:void(0);" title="'+changeTitle(list[i].status)+'"><span\n' +
                         '                            class="label label-danger">'+change(list[i].status)+'</span></a>\n' +

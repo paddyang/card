@@ -32,12 +32,12 @@ public class User implements Serializable {
     /**
      * 可用授权数
      */
-    private Integer allCount;
+    private Integer availableNum;
 
     /**
      * 已用授权数
      */
-    private Integer nowCount;
+    private Integer usedNum;
 
     /**
      * 代理等级
@@ -146,34 +146,34 @@ public class User implements Serializable {
 
     /**
      * 可用授权数
-     * @return all_count 可用授权数
+     * @return available_num 可用授权数
      */
-    public Integer getAllCount() {
-        return allCount;
+    public Integer getAvailableNum() {
+        return availableNum;
     }
 
     /**
      * 可用授权数
-     * @param allCount 可用授权数
+     * @param availableNum 可用授权数
      */
-    public void setAllCount(Integer allCount) {
-        this.allCount = allCount;
+    public void setAvailableNum(Integer availableNum) {
+        this.availableNum = availableNum;
     }
 
     /**
      * 已用授权数
-     * @return now_count 已用授权数
+     * @return used_num 已用授权数
      */
-    public Integer getNowCount() {
-        return nowCount;
+    public Integer getUsedNum() {
+        return usedNum;
     }
 
     /**
      * 已用授权数
-     * @param nowCount 已用授权数
+     * @param usedNum 已用授权数
      */
-    public void setNowCount(Integer nowCount) {
-        this.nowCount = nowCount;
+    public void setUsedNum(Integer usedNum) {
+        this.usedNum = usedNum;
     }
 
     /**

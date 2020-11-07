@@ -37,7 +37,7 @@
             <div class="form-group" id="userType">
                 <label>类型</label>
 <!--                <input class="form-control" type="text" id="type" name="type" value="" placeholder="用户类型">-->
-                <select id="safeCode" class="form-control">
+                <select id="type" class="form-control">
                     <!--                <option value ="BLZS">BLZS</option>-->
                 </select>
             </div>
@@ -60,9 +60,9 @@
                 var list = data.data;
                 var text='';
                 for (var i=0;i<list.length;i++) {
-                    text+='<option value ="'+list[i].id+'">'+list[i].name+'</option>';
+                    text+='<option value ="'+list[i].cardType+'">'+list[i].name+'</option>';
                 }
-                $("#safeCode").html(text);
+                $("#type").html(text);
             }
         },'json');
     }
@@ -79,10 +79,13 @@
                 nickname : nickname,
                 type : type
             }, function(data) {
-                if (data.status == 200){
+                if (data.status === 200){
                     //成功
-                    alert(data.msg)
-                } else {
+                    alert(data.msg);
+                    window.location.href='/html/user.html';
+                } else if(data.status === 400){
+                    alert(data.msg);
+                }else{
                     window.location.href='/html/login.html';
                 }
             },'json');

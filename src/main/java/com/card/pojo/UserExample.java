@@ -444,123 +444,123 @@ public class UserExample {
             return (Criteria) this;
         }
 
-        public Criteria andAllCountIsNull() {
-            addCriterion("all_count is null");
+        public Criteria andAvailableNumIsNull() {
+            addCriterion("available_num is null");
             return (Criteria) this;
         }
 
-        public Criteria andAllCountIsNotNull() {
-            addCriterion("all_count is not null");
+        public Criteria andAvailableNumIsNotNull() {
+            addCriterion("available_num is not null");
             return (Criteria) this;
         }
 
-        public Criteria andAllCountEqualTo(Integer value) {
-            addCriterion("all_count =", value, "allCount");
+        public Criteria andAvailableNumEqualTo(Integer value) {
+            addCriterion("available_num =", value, "availableNum");
             return (Criteria) this;
         }
 
-        public Criteria andAllCountNotEqualTo(Integer value) {
-            addCriterion("all_count <>", value, "allCount");
+        public Criteria andAvailableNumNotEqualTo(Integer value) {
+            addCriterion("available_num <>", value, "availableNum");
             return (Criteria) this;
         }
 
-        public Criteria andAllCountGreaterThan(Integer value) {
-            addCriterion("all_count >", value, "allCount");
+        public Criteria andAvailableNumGreaterThan(Integer value) {
+            addCriterion("available_num >", value, "availableNum");
             return (Criteria) this;
         }
 
-        public Criteria andAllCountGreaterThanOrEqualTo(Integer value) {
-            addCriterion("all_count >=", value, "allCount");
+        public Criteria andAvailableNumGreaterThanOrEqualTo(Integer value) {
+            addCriterion("available_num >=", value, "availableNum");
             return (Criteria) this;
         }
 
-        public Criteria andAllCountLessThan(Integer value) {
-            addCriterion("all_count <", value, "allCount");
+        public Criteria andAvailableNumLessThan(Integer value) {
+            addCriterion("available_num <", value, "availableNum");
             return (Criteria) this;
         }
 
-        public Criteria andAllCountLessThanOrEqualTo(Integer value) {
-            addCriterion("all_count <=", value, "allCount");
+        public Criteria andAvailableNumLessThanOrEqualTo(Integer value) {
+            addCriterion("available_num <=", value, "availableNum");
             return (Criteria) this;
         }
 
-        public Criteria andAllCountIn(List<Integer> values) {
-            addCriterion("all_count in", values, "allCount");
+        public Criteria andAvailableNumIn(List<Integer> values) {
+            addCriterion("available_num in", values, "availableNum");
             return (Criteria) this;
         }
 
-        public Criteria andAllCountNotIn(List<Integer> values) {
-            addCriterion("all_count not in", values, "allCount");
+        public Criteria andAvailableNumNotIn(List<Integer> values) {
+            addCriterion("available_num not in", values, "availableNum");
             return (Criteria) this;
         }
 
-        public Criteria andAllCountBetween(Integer value1, Integer value2) {
-            addCriterion("all_count between", value1, value2, "allCount");
+        public Criteria andAvailableNumBetween(Integer value1, Integer value2) {
+            addCriterion("available_num between", value1, value2, "availableNum");
             return (Criteria) this;
         }
 
-        public Criteria andAllCountNotBetween(Integer value1, Integer value2) {
-            addCriterion("all_count not between", value1, value2, "allCount");
+        public Criteria andAvailableNumNotBetween(Integer value1, Integer value2) {
+            addCriterion("available_num not between", value1, value2, "availableNum");
             return (Criteria) this;
         }
 
-        public Criteria andNowCountIsNull() {
-            addCriterion("now_count is null");
+        public Criteria andUsedNumIsNull() {
+            addCriterion("used_num is null");
             return (Criteria) this;
         }
 
-        public Criteria andNowCountIsNotNull() {
-            addCriterion("now_count is not null");
+        public Criteria andUsedNumIsNotNull() {
+            addCriterion("used_num is not null");
             return (Criteria) this;
         }
 
-        public Criteria andNowCountEqualTo(Integer value) {
-            addCriterion("now_count =", value, "nowCount");
+        public Criteria andUsedNumEqualTo(Integer value) {
+            addCriterion("used_num =", value, "usedNum");
             return (Criteria) this;
         }
 
-        public Criteria andNowCountNotEqualTo(Integer value) {
-            addCriterion("now_count <>", value, "nowCount");
+        public Criteria andUsedNumNotEqualTo(Integer value) {
+            addCriterion("used_num <>", value, "usedNum");
             return (Criteria) this;
         }
 
-        public Criteria andNowCountGreaterThan(Integer value) {
-            addCriterion("now_count >", value, "nowCount");
+        public Criteria andUsedNumGreaterThan(Integer value) {
+            addCriterion("used_num >", value, "usedNum");
             return (Criteria) this;
         }
 
-        public Criteria andNowCountGreaterThanOrEqualTo(Integer value) {
-            addCriterion("now_count >=", value, "nowCount");
+        public Criteria andUsedNumGreaterThanOrEqualTo(Integer value) {
+            addCriterion("used_num >=", value, "usedNum");
             return (Criteria) this;
         }
 
-        public Criteria andNowCountLessThan(Integer value) {
-            addCriterion("now_count <", value, "nowCount");
+        public Criteria andUsedNumLessThan(Integer value) {
+            addCriterion("used_num <", value, "usedNum");
             return (Criteria) this;
         }
 
-        public Criteria andNowCountLessThanOrEqualTo(Integer value) {
-            addCriterion("now_count <=", value, "nowCount");
+        public Criteria andUsedNumLessThanOrEqualTo(Integer value) {
+            addCriterion("used_num <=", value, "usedNum");
             return (Criteria) this;
         }
 
-        public Criteria andNowCountIn(List<Integer> values) {
-            addCriterion("now_count in", values, "nowCount");
+        public Criteria andUsedNumIn(List<Integer> values) {
+            addCriterion("used_num in", values, "usedNum");
             return (Criteria) this;
         }
 
-        public Criteria andNowCountNotIn(List<Integer> values) {
-            addCriterion("now_count not in", values, "nowCount");
+        public Criteria andUsedNumNotIn(List<Integer> values) {
+            addCriterion("used_num not in", values, "usedNum");
             return (Criteria) this;
         }
 
-        public Criteria andNowCountBetween(Integer value1, Integer value2) {
-            addCriterion("now_count between", value1, value2, "nowCount");
+        public Criteria andUsedNumBetween(Integer value1, Integer value2) {
+            addCriterion("used_num between", value1, value2, "usedNum");
             return (Criteria) this;
         }
 
-        public Criteria andNowCountNotBetween(Integer value1, Integer value2) {
-            addCriterion("now_count not between", value1, value2, "nowCount");
+        public Criteria andUsedNumNotBetween(Integer value1, Integer value2) {
+            addCriterion("used_num not between", value1, value2, "usedNum");
             return (Criteria) this;
         }
 

@@ -34,10 +34,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateNowCount(int userId, int nowCount) {
+    public void updateUsedNum(int userId, int availableNum,int usedNum) {
         User owner=new User();
         owner.setId(userId);
-        owner.setNowCount(nowCount);
+        owner.setUsedNum(usedNum);
+        owner.setAvailableNum(availableNum);
         userMapper.updateByPrimaryKeySelective(owner);
     }
 
@@ -64,11 +65,11 @@ public class UserServiceImpl implements UserService {
         if(null != user.getLevel()){
             criteria.andLevelEqualTo(user.getLevel());
         }
-        if(null != user.getNowCount()){
-            criteria.andNowCountEqualTo(user.getNowCount());
+        if(null != user.getUsedNum()){
+            criteria.andUsedNumEqualTo(user.getUsedNum());
         }
-        if(null != user.getAllCount()){
-            criteria.andAllCountEqualTo(user.getAllCount());
+        if(null != user.getAvailableNum()){
+            criteria.andAvailableNumEqualTo(user.getAvailableNum());
         }
         if(null != user.getStatus()){
             criteria.andStatusEqualTo(user.getStatus());
@@ -82,8 +83,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public void addUser(User user) {
         user.setPassword(MD5Utils.md5("123456"));
-        user.setAllCount(0);
-        user.setNowCount(0);
+        user.setAvailableNum(0);
+        user.setUsedNum(0);
         user.setStatus(0);
         user.setCreateTime(new Date());
         userMapper.insertSelective(user);
@@ -94,15 +95,15 @@ public class UserServiceImpl implements UserService {
     public void change(User user,int num, User phoneUser) throws Exception{
         User user1 = new User();
         user1.setId(user.getId());
-        user1.setAllCount(user.getAllCount()-num);
-        user1.setNowCount(user.getNowCount()+num);
+        user1.setAvailableNum(user.getAvailableNum()-num);
+        user1.setUsedNum(user.getUsedNum()+num);
         int i = userMapper.updateByPrimaryKeySelective(user1);
         if (i<1){
             throw new Exception();
         }
         User user2 = new User();
         user2.setId(phoneUser.getId());
-        user2.setAllCount(phoneUser.getAllCount()+num);
+        user2.setAvailableNum(phoneUser.getAvailableNum()+num);
         int b = userMapper.updateByPrimaryKeySelective(user2);
         if (b<1){
             throw new Exception();

@@ -18,8 +18,8 @@
     <li class="dropdown ">
         <a href="add.html"><i class="fa fa-reorder"></i> 生成卡密</a>
     </li>
-    <li class="dropdown ">
-        <a href="addCardType.html"><i class="fa fa-reorder"></i> 增加类型</a>
+    <li class="dropdown " id="admin">
+        <!--<a href="addCardType.html"><i class="fa fa-reorder"></i> 增加类型</a>-->
     </li>
 	<li class="dropdown ">
         <a href="keylock.html"><i class="fa fa-reorder"></i> 锁定卡密</a>
@@ -66,4 +66,14 @@
   <script>
       var username = sessionStorage.getItem('username');
       $("#username").text(username+'，退出');
+  </script>
+
+  <script>
+      $.get('/isAdmin', function(data) {
+          if (data.status === 200){
+              //成功
+              var html='<a href="addCardType.html"><i class="fa fa-reorder"></i> 增加类型</a>';
+              $("#admin").html(html);
+          }
+      },'json');
   </script>

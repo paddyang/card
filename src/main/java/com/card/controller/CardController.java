@@ -77,7 +77,7 @@ public class CardController {
             return GsonUtils.GsonString(BaseResponse.build(400,"登录超时，请重新登录！"));
         }
         User user = userService.getByUsername(username);
-        int remainCardNum = user.getAllCount();
+        int remainCardNum = user.getAvailableNum();
         if (remainCardNum<num){
             return GsonUtils.GsonString(BaseResponse.build(400,"可生产卡密数量不足！"));
         }
@@ -86,7 +86,7 @@ public class CardController {
         }else{
             cardsService.batchAddCard(user.getId(),num,days,user.getType());
         }
-        userService.updateNowCount(user.getId(),user.getNowCount()+num);
+        userService.updateUsedNum(user.getId(),user.getAvailableNum()-num,user.getUsedNum()+num);
         return GsonUtils.GsonString(BaseResponse.success());
     }
 
@@ -168,8 +168,9 @@ public class CardController {
         User user = userService.getByUsername(username);
         if (user.getId().intValue()==card.getUserId().intValue()){
             cardsService.lock(card.getId());
+            return GsonUtils.GsonString(BaseResponse.success(card));
         }
-        return GsonUtils.GsonString(BaseResponse.success(card));
+        return GsonUtils.GsonString(BaseResponse.build(200,"失败"));
     }
 
     /**
@@ -204,16 +205,18 @@ public class CardController {
         List<CardType> list=cardTypeService.getAllType(StatusEnum.VALID.getCode());
         String username = (String) session.getAttribute("username");
         User user = userService.getByUsername(username);
-        if (!user.getType().equalsIgnoreCase("ALL")){
-            for (CardType cardType:list) {
-                if (cardType.getCardType().equals(user.getType())){
-                    ArrayList<CardType> types = new ArrayList<>();
-                    types.add(cardType);
-                    return GsonUtils.GsonString(BaseResponse.success(types));
-                }
+        //超级管理员
+        if (user.getType().equalsIgnoreCase(TypeEnum.ALL.getCode())){
+            return GsonUtils.GsonString(BaseResponse.success(list));
+        }
+
+        List<CardType> types = new ArrayList<>();
+        for (CardType cardType:list) {
+            if (user.getType().contains(cardType.getCardType())){
+                types.add(cardType);
             }
         }
-        return GsonUtils.GsonString(BaseResponse.success(list));
+        return GsonUtils.GsonString(BaseResponse.success(types));
     }
 
     /**
@@ -240,6 +243,30 @@ public class CardController {
             return GsonUtils.GsonString(BaseResponse.build(400,"您没有权限！"));
         }
         cardTypeService.addCardType(cardType.toUpperCase(),name);
+        //清除redis缓存
+        redisTemplate.delete(RedisKey.CARD_TYPE);
+        return GsonUtils.GsonString(BaseResponse.success());
+    }
+
+    /**
+     * 删除卡密类型
+     * @param cardType
+     * @param name
+     * @return
+     */
+    @RequestMapping(value = "/deleteCardType",produces="text/json;charset=UTF-8")
+    public String deleteCardType(HttpSession session,String cardType, String name){
+        String username = (String) session.getAttribute("username");
+        User user = userService.getByUsername(username);
+        if (!user.getType().equalsIgnoreCase(TypeEnum.ALL.getCode())){
+            return GsonUtils.GsonString(BaseResponse.build(400,"您没有权限！"));
+        }
+        //判断卡密是否存在
+        CardType byCardType = cardTypeService.getByCardType(cardType);
+        if (null == byCardType){
+            return GsonUtils.GsonString(BaseResponse.build(400,"您没有权限！"));
+        }
+        cardTypeService.updateById(byCardType.getId());
         //清除redis缓存
         redisTemplate.delete(RedisKey.CARD_TYPE);
         return GsonUtils.GsonString(BaseResponse.success());

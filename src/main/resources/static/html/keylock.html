@@ -37,7 +37,7 @@
     function lock() {
         var cardNo = $("#key").val();
         $.get('/lockCard', {"cardNo": cardNo}, function (data) {
-            if (data.status == 200) {
+            if (data.status === 200) {
                 alert(data.msg);
             } else {
                 window.location.href = "/html/login.html";

@@ -7,11 +7,7 @@ package com.card.constant;
  */
 public enum TypeEnum {
 
-    ALL("ALL","所有"),
-    FFSD("FFSD","防封时代"),
-    AZCT("AZCT","安卓春天"),
-    BLZS("BLZS","菠萝助手"),
-    SX("SX","随心");
+    ALL("ALL","所有");
 
     private String code;
     private String desc;

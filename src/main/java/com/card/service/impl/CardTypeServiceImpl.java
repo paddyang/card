@@ -76,5 +76,15 @@ public class CardTypeServiceImpl implements CardTypeService {
         return cardTypeMapper.insertSelective(type);
     }
 
+    @Override
+    public int updateById(int id) {
+        CardType type=new CardType();
+        type.setId(id);
+        type.setUpdateTime(new Date());
+        type.setStatus(StatusEnum.INVALID.getCode());
+        return cardTypeMapper.updateByPrimaryKeySelective(type);
+
+    }
+
 
 }

@@ -90,6 +90,21 @@ public class UserController {
     }
 
     /**
+     * 判断是否超级管理员
+     * @param session
+     * @return
+     */
+    @RequestMapping(value = "/isAdmin", produces = "text/json;charset=UTF-8")
+    public String isAdmin(HttpSession session) {
+        String username = (String) session.getAttribute("username");
+        User user = userService.getByUsername(username);
+        if (user.getType().equals(TypeEnum.ALL.getCode())){
+            return GsonUtils.GsonString(BaseResponse.build(200, "是"));
+        }
+        return GsonUtils.GsonString(BaseResponse.build(400, "不是"));
+    }
+
+    /**
      * 获取卡密数量信息
      *
      * @param session
@@ -105,10 +120,10 @@ public class UserController {
             User user = userService.getByUsername(username);
             CardInfo info = new CardInfo();
             info.setUsername(user.getUsername());
-            info.setAllCard(user.getAllCount());
-            info.setUsedCard(user.getNowCount());
+            info.setAllCard(user.getAvailableNum());
+            info.setUsedCard(user.getUsedNum());
             info.setNotUsedCard(cardsService.getNoUsedCardNum(user.getId()));
-            info.setRemainCard(user.getAllCount() - user.getNowCount());
+            info.setRemainCard(user.getAvailableNum());
             SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String dateStr = sf.format(new Date());
             info.setDateStr("时间：" + dateStr);
@@ -180,15 +195,15 @@ public class UserController {
      */
     @RequestMapping(value = "/addAgent", produces = "text/json;charset=UTF-8")
     public String addAgent(HttpSession session, String phone, String nickname, String type) {
-        if (StringUtils.isBlank(phone) || StringUtils.isBlank(nickname)) {
-            return GsonUtils.GsonString(BaseResponse.build(200, "手机号或昵称不能为空！"));
+        if (StringUtils.isBlank(phone) || StringUtils.isBlank(nickname) || StringUtils.isBlank(type)) {
+            return GsonUtils.GsonString(BaseResponse.build(400, "参数不能为空！"));
         }
         if (phone.length() != 11 || !MobileUtil.isMobile(phone)) {
-            return GsonUtils.GsonString(BaseResponse.build(200, "请输入正确的手机号！"));
+            return GsonUtils.GsonString(BaseResponse.build(400, "请输入正确的手机号！"));
         }
         User user = userService.getByUsername(phone);
         if (null != user) {
-            return GsonUtils.GsonString(BaseResponse.build(200, "手机号已被注册！"));
+            return GsonUtils.GsonString(BaseResponse.build(400, "手机号已被注册！"));
         }
         String loginUsername = (String) session.getAttribute("username");
         User loginUser = userService.getByUsername(loginUsername);
@@ -196,10 +211,10 @@ public class UserController {
         user.setParentId(loginUser.getId());
         user.setUsername(phone);
         user.setNickname(nickname);
-        if (loginUser.getType().equals(TypeEnum.ALL.getCode())) {
+        if (loginUser.getType().equals(TypeEnum.ALL.getCode()) || loginUser.getType().contains(type)) {
             user.setType(type);
-        } else {
-            user.setType(loginUser.getType());
+        }else {
+            return GsonUtils.GsonString(BaseResponse.build(400, "类型错误！"));
         }
         user.setLevel(loginUser.getLevel() + 1);
         userService.addUser(user);
@@ -224,11 +239,11 @@ public class UserController {
             if (null == phoneUser) {
                 return GsonUtils.GsonString(BaseResponse.build(200, "用户不存在!"));
             }
-            if (phoneUser.getAllCount() < num) {
-                return GsonUtils.GsonString(BaseResponse.build(200, "可用授权书数量不足!"));
-            }
             String username = (String) session.getAttribute("username");
             User user = userService.getByUsername(username);
+            if (user.getAvailableNum() < num) {
+                return GsonUtils.GsonString(BaseResponse.build(200, "可用授权数量不足!"));
+            }
             if (!user.getType().equals(phoneUser.getType()) && !user.getType().equalsIgnoreCase("ALL")) {
                 return GsonUtils.GsonString(BaseResponse.build(200, "用户类型不匹配!"));
             }

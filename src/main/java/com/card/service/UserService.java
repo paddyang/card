@@ -13,7 +13,7 @@ public interface UserService {
 
     User getByUsername(String username);
 
-    void updateNowCount(int userId,int nowCount);
+    void updateUsedNum(int userId,int availableNum,int usedNum);
 
     void editPass(int userId,String password);
 

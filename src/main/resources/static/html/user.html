@@ -63,11 +63,11 @@
                 view+='<tr class="text-c">\n' +
                     '                    <td>'+list[i].username+'</td>\n' +
                     '                    <td>'+list[i].nickname+'</td>\n' +
-                    '                    <td>'+list[i].allCount+'</td>\n' +
-                    '                    <td>'+list[i].nowCount+'</td>\n' +
+                    '                    <td>'+list[i].availableNum+'</td>\n' +
+                    '                    <td>'+list[i].usedNum+'</td>\n' +
                     '                    <td>'+isOK(list[i].isOk)+'</td>\n' +
                     '                    <td class="td-manage">\n' +
-                    '                        <a href="/html/move.html" class="button button-pill button-tiny">转赠授权</a><a\n' +
+                    '                        <a href="/html/move.html?user='+list[i].username+'" class="button button-pill button-tiny">转赠授权</a><a\n' +
                     '                            href="javascript:void(0);" onclick="lockUser('+list[i].id+')" class="button button-pill button-tiny">封停帐号</a>\n' +
                     '                    </td>\n' +
                     '                </tr>';

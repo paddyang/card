@@ -212,12 +212,13 @@ public class CheckController {
         Card card = (Card) redisTemplate.opsForValue().get(RedisKey.CARD_INFO + cardNo);
         if (null == card){
             card =cardsService.getByCardNoAndType(cardNo,type);
-            if (null == card){
-                return GsonUtils.GsonString(BaseResponse.build(400,"激活码不存在！"));
-            }else{
-                redisTemplate.opsForValue().set(RedisKey.CARD_INFO + cardNo, card, RedisKey.CARD_INFO_EXPIRE, TimeUnit.SECONDS);
-            }
         }
+        if (null == card || !card.getSafeCode().equals(type)){
+            return GsonUtils.GsonString(BaseResponse.build(400,"激活码不存在！"));
+        }else{
+            redisTemplate.opsForValue().set(RedisKey.CARD_INFO + cardNo, card, RedisKey.CARD_INFO_EXPIRE, TimeUnit.SECONDS);
+        }
+
         return GsonUtils.GsonString(BaseResponse.success(card));
     }
 
