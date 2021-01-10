@@ -1,13 +1,14 @@
 package com.card.utils;
- 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Component;
-
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
  
 //@Component
@@ -15,7 +16,7 @@ public class RedisUtils {
     private static final String LOCK_PREFIX = "PROJECT_NAME_";
  
     private static final Long LOCK_EXPIRE = 1000L;
- 
+
     @Autowired
     RedisTemplate redisTemplate;
  

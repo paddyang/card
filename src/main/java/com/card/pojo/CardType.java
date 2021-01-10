@@ -1,5 +1,7 @@
 package com.card.pojo;
 
+import com.card.utils.GsonUtils;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -128,5 +130,10 @@ public class CardType implements Serializable {
      */
     public void setStatus(String status) {
         this.status = status == null ? null : status.trim();
+    }
+
+    @Override
+    public String toString() {
+        return GsonUtils.GsonString(this);
     }
 }

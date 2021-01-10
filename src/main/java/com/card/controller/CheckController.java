@@ -3,14 +3,12 @@ package com.card.controller;
 import com.card.constant.CardStatusEnum;
 import com.card.constant.RedisKey;
 import com.card.constant.ReturnCodeEnum;
-import com.card.constant.StatusEnum;
 import com.card.pojo.Card;
 import com.card.pojo.CardType;
 import com.card.pojo.LogCheck;
 import com.card.service.CardTypeService;
 import com.card.service.CardsService;
 import com.card.service.LogCheckService;
-import com.card.service.UserService;
 import com.card.utils.BaseResponse;
 import com.card.utils.GsonUtils;
 import com.card.utils.HttpUtils;
@@ -18,7 +16,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -42,16 +39,13 @@ public class CheckController {
     private CardsService cardsService;
 
     @Autowired
-    private UserService userService;
-
-    @Autowired
     private LogCheckService logCheckService;
 
     @Autowired
     private CardTypeService cardTypeService;
 
     @Autowired
-    private RedisTemplate redisTemplate;
+    private StringRedisTemplate redisTemplate;
 
     /**
      * 通用验证方法
@@ -79,11 +73,13 @@ public class CheckController {
             Integer id = cardType.getId();
             type = cardType.getCardType();
 
-            Card card = (Card) redisTemplate.opsForValue().get(RedisKey.CARD_INFO + a);
+            String cardStr = redisTemplate.opsForValue().get(RedisKey.CARD_INFO + a);
+            Card card = GsonUtils.GsonToBean(cardStr, Card.class);
+            //Card card = (Card) redisTemplate.opsForValue().get(RedisKey.CARD_INFO + a);
             if (null == card) {
                 card = cardsService.getByCardNo(a);
                 if (null != card && CardStatusEnum.ACTIVATED.getCode()==card.getStatus()) {
-                    redisTemplate.opsForValue().set(RedisKey.CARD_INFO + a, card, RedisKey.CARD_INFO_EXPIRE, TimeUnit.SECONDS);
+                    redisTemplate.opsForValue().set(RedisKey.CARD_INFO + a, card.toString(), RedisKey.CARD_INFO_EXPIRE, TimeUnit.SECONDS);
                 }
             }
 
@@ -209,14 +205,16 @@ public class CheckController {
         if (StringUtils.isBlank(cardNo)){
             return GsonUtils.GsonString(BaseResponse.build(400,"激活码不能为空！"));
         }
-        Card card = (Card) redisTemplate.opsForValue().get(RedisKey.CARD_INFO + cardNo);
+        String cardStr = redisTemplate.opsForValue().get(RedisKey.CARD_INFO + cardNo);
+        Card card = GsonUtils.GsonToBean(cardStr, Card.class);
+        //Card card = (Card) redisTemplate.opsForValue().get(RedisKey.CARD_INFO + cardNo);
         if (null == card){
             card =cardsService.getByCardNoAndType(cardNo,type);
         }
         if (null == card || !card.getSafeCode().equals(type)){
             return GsonUtils.GsonString(BaseResponse.build(400,"激活码不存在！"));
         }else{
-            redisTemplate.opsForValue().set(RedisKey.CARD_INFO + cardNo, card, RedisKey.CARD_INFO_EXPIRE, TimeUnit.SECONDS);
+            redisTemplate.opsForValue().set(RedisKey.CARD_INFO + cardNo, card.toString(), RedisKey.CARD_INFO_EXPIRE, TimeUnit.SECONDS);
         }
 
         return GsonUtils.GsonString(BaseResponse.success(card));

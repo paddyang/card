@@ -2,17 +2,16 @@ package com.card.controller;
 
 import com.card.constant.RedisKey;
 import com.card.constant.TypeEnum;
-import com.card.pojo.Card;
 import com.card.pojo.CardInfo;
 import com.card.pojo.User;
 import com.card.service.CardsService;
-import com.card.utils.*;
 import com.card.service.UserService;
+import com.card.utils.*;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -39,7 +38,7 @@ public class UserController {
     private UserService userService;
 
     @Autowired
-    private RedisTemplate redisTemplate;
+    private StringRedisTemplate redisTemplate;
 
 
     /**
@@ -123,7 +122,8 @@ public class UserController {
             info.setAllCard(user.getAvailableNum());
             info.setUsedCard(user.getUsedNum());
             info.setNotUsedCard(cardsService.getNoUsedCardNum(user.getId()));
-            info.setRemainCard(user.getAvailableNum());
+            info.setRemainCard(redisTemplate.keys(RedisKey.CARD_INFO+"*").size());
+            //info.setRemainCard(user.getAvailableNum());
             SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String dateStr = sf.format(new Date());
             info.setDateStr("时间：" + dateStr);

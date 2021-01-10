@@ -1,5 +1,7 @@
 package com.card.pojo;
 
+import com.card.utils.GsonUtils;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -254,5 +256,10 @@ public class User implements Serializable {
      */
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    @Override
+    public String toString() {
+        return GsonUtils.GsonString(this);
     }
 }

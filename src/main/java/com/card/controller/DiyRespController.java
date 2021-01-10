@@ -17,10 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -53,22 +50,22 @@ public class DiyRespController {
      * @return
      */
     @RequestMapping(value = "/{type}",produces = "application/json;charset=UTF-8")
-    public String diyResp(@PathVariable String type, Map<String,Object> req){
-        System.out.println(req);
+    public String diyResp(@PathVariable String type, @RequestParam Map<String,Object> req){
+        logger.info("请求地址---/{}---请求参数---{}",type,req);
         DiyResp diyResp = diyRespService.getByPath(type);
         return diyResp.getOutput();
     }
 
     @RequestMapping(value = "/{type1}/{type2}",produces = "application/json;charset=UTF-8")
-    public String diy2(@PathVariable String type1, @PathVariable String type2,Map<String,Object> req){
-        System.out.println(req);
+    public String diy2(@PathVariable String type1, @PathVariable String type2,@RequestParam Map<String,Object> req){
+        logger.info("请求地址---/{}/{}---请求参数---{}",type1,type2,req);
         DiyResp diyResp = diyRespService.getByPath(type1+"/"+type2);
         return diyResp.getOutput();
     }
 
     @RequestMapping(value = "/{type1}/{type2}/{type3}",produces = "application/json;charset=UTF-8")
-    public String diy3(@PathVariable String type1, @PathVariable String type2, @PathVariable String type3,Map<String,Object> req){
-        System.out.println(req);
+    public String diy3(@PathVariable String type1, @PathVariable String type2, @PathVariable String type3,@RequestParam Map<String,Object> req){
+        logger.info("请求地址---/{}/{}/{}---请求参数---{}",type1,type2,type3,req);
         DiyResp diyResp = diyRespService.getByPath(type1+"/"+type2+"/"+type3);
         return diyResp.getOutput();
     }

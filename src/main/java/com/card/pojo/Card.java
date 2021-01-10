@@ -1,5 +1,6 @@
 package com.card.pojo;
 
+import com.card.utils.GsonUtils;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.io.Serializable;
@@ -248,5 +249,10 @@ public class Card implements Serializable {
         this.days = days;
         this.isOk = isOk;
         this.createTime = createTime;
+    }
+
+    @Override
+    public String toString() {
+        return GsonUtils.GsonString(this);
     }
 }

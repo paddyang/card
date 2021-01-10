@@ -1,5 +1,7 @@
 package com.card.pojo;
 
+import com.card.utils.GsonUtils;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -191,5 +193,10 @@ public class LogCheck implements Serializable {
      */
     public void setCheckUid(String checkUid) {
         this.checkUid = checkUid == null ? null : checkUid.trim();
+    }
+
+    @Override
+    public String toString() {
+        return GsonUtils.GsonString(this);
     }
 }

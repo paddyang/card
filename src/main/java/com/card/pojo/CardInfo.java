@@ -1,5 +1,7 @@
 package com.card.pojo;
 
+import com.card.utils.GsonUtils;
+
 /**
  * @author: yangPan
  * @date: 2019/7/6 18:08
@@ -83,5 +85,10 @@ public class CardInfo {
 
     public void setDateStr(String dateStr) {
         this.dateStr = dateStr;
+    }
+
+    @Override
+    public String toString() {
+        return GsonUtils.GsonString(this);
     }
 }

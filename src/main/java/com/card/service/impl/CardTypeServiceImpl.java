@@ -6,8 +6,9 @@ import com.card.mapper.CardTypeMapper;
 import com.card.pojo.CardType;
 import com.card.pojo.CardTypeExample;
 import com.card.service.CardTypeService;
+import com.card.utils.GsonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -26,18 +27,20 @@ public class CardTypeServiceImpl implements CardTypeService {
     private CardTypeMapper cardTypeMapper;
 
     @Autowired
-    private RedisTemplate redisTemplate;
+    private StringRedisTemplate redisTemplate;
 
 
     @Override
     public CardType getByCardType(String type) {
-        CardType cardType = (CardType) redisTemplate.opsForHash().get(RedisKey.CARD_TYPE,type);
+        String cardTypeStr= (String) redisTemplate.opsForHash().get(RedisKey.CARD_TYPE, type);
+        CardType cardType = GsonUtils.GsonToBean(cardTypeStr, CardType.class);
+        //CardType cardType = (CardType) redisTemplate.opsForHash().get(RedisKey.CARD_TYPE,type);
         if (null==cardType) {
             cardType = getCardType(type);
             List<CardType> allType = getAllType(StatusEnum.VALID.getCode());
-            HashMap<String, CardType> map = new HashMap<>();
+            HashMap<String, String> map = new HashMap<>();
             for (CardType ct :allType) {
-                map.put(ct.getCardType(),ct);
+                map.put(ct.getCardType(),ct.toString());
             }
             redisTemplate.opsForHash().putAll(RedisKey.CARD_TYPE,map);
         }
